@@ -1,0 +1,6 @@
+> Calls to state are async meaning the state will be change after the execution of the file.
+> Also, importing react in every file in imp as it hepl convering html to jsx in background.
+ -- react.createrElement('div', null, react.createElement('h1', null, 'Data to be displayed b/w h1')), null is basically props value
+> To deal with this we can pass in a second parameter while setting a state, a callback function
+> if you write a increment functionw which increments a state value and call it 5 times then the state will not be update 5 times, for better performance react groups these calls as one only.
+> To over come this we need to deal with the previous state value hence in setState we pass on a callback function which takes in previousState as an argument and chages its value
