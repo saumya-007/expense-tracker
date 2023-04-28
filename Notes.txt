@@ -4,3 +4,4 @@
 > To deal with this we can pass in a second parameter while setting a state, a callback function
 > if you write a increment functionw which increments a state value and call it 5 times then the state will not be update 5 times, for better performance react groups these calls as one only.
 > To over come this we need to deal with the previous state value hence in setState we pass on a callback function which takes in previousState as an argument and chages its value
+> Communication from child to parent can be done by passing a parent function to child and then calling that function in child and passing parameter (child parameter) in that funciton which will be executed in parent component
