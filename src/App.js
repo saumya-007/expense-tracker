@@ -1,23 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './pages/Dashboard/Header/Header';
+import Body from './pages/Dashboard/Body/Body';
+import { useState } from 'react';
+
+const dummyData = {
+  data: [
+    {
+      id: Math.random().toString(),
+      activity: 'lunch',
+      amount: 'Rs 200',
+      date: new Date(12, 1, 2023)
+    }
+  ],
+  previousPage: 1,
+}
 
 function App() {
+  const [expensesData, setExpenseData] = useState(dummyData);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header expensesData={expensesData} setExpenseData={setExpenseData} />
+      <Body expensesData={expensesData} setExpenseData={setExpenseData}/>
     </div>
   );
 }
