@@ -22,9 +22,10 @@ function formatResponse(
 }
 
 function formatError({error}) {
+  console.log(error);
   return formatResponse({
     status: 'error', 
-    statusCode: error.httpStatusCode,
+    statusCode: error.httpStatusCode ? error.httpStatusCode : 500,
     body: {
       message: error.message,
       name: error.name,

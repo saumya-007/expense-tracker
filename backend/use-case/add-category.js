@@ -10,7 +10,7 @@ module.exports = function makeAddCategory({
     return async function addCategory({
       categoryName
     }) {
-  
+      // add functionality to add created by at and modified by at
       validateCategoryData({categoryName});
       categoryName = convertToCammelCase(categoryName);
       const expense_category = getCategoryByName({categoryName});

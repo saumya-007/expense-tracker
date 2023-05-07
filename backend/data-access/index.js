@@ -7,8 +7,6 @@ const cockroach = new CockraochDBUtils({
   database: backendConfig.cockroachCloudCluster.dbName,
 });
 
-console.log(cockroach);
-
 const makeExpenseDb = require('./expense-db');
 const expensedb = makeExpenseDb({
   database: backendConfig.cockroachCloudCluster.dbName,

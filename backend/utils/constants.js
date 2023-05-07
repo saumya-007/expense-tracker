@@ -4,7 +4,10 @@ const ERRORS = {
 }
 
 const CATEGORY_TABLE = ['id', 'category_name'];
+
+const DEAULT_SPEND_LIMIT = 0.00;
 module.exports = Object.freeze({
   ERRORS,
   CATEGORY_TABLE,
+  DEAULT_SPEND_LIMIT,
 })

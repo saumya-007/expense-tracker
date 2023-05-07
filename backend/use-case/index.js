@@ -7,7 +7,7 @@ const ErrorUtils = require('../utils/ErrorUtils');
 const getErrorMessage = new ErrorUtils({ errors: ERRORS }).getErrorMessageFromCode;
 
 const ServiceUtils = require('../utils/ServiceUtils');
-const { convertToCammelCase } = new ServiceUtils.getFunctions()
+const { convertToCammelCase } = ServiceUtils.getFunctions.bind(ServiceUtils);
 
 const makeAddCategory = require('./add-category');
 const addCategory = makeAddCategory({
@@ -24,7 +24,7 @@ const getCategoryByName = makeGetCategoryByName({
   expensedb,
   Joi,
   getErrorMessage,
-  categoryTableFields,
+  categoryTableFields: CATEGORY_TABLE,
   ValidationError,
 })
 
