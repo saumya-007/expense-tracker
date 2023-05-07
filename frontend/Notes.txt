@@ -6,3 +6,17 @@
 > To over come this we need to deal with the previous state value hence in setState we pass on a callback function which takes in previousState as an argument and chages its value
 > Communication from child to parent can be done by passing a parent function to child and then calling that function in child and passing parameter (child parameter) in that funciton which will be executed in parent component
 > display expense as lacs mil etc
+> Portals help to render component in different div other than id=root div, (Can be used for modals)
+> Addind error boundry component and wrapping all components with it to deal with errors
+> Adding a loggger for errors for both front end and back end.
+> HOC are imp they help us in achieving DRY in react by makine commmon methods to be used at the same time.
+> While creating HOC make sure to passdown rest of the props.
+> It is possible to use  a prop whose value is a function, to control what is actually rendered by a component.
+> the above is actually called as render prop, it refers to a technique for sharing code between components using porps whose value is a function.
+> HOC vs Render Props ?
+> Prop drilling can be tipical when we are dealing with a large apllication with lots of nestead compoents hence we use "context apis"
+> creating a context makes us available with 2 components a provider and a consumer we wrap the top most component in the tree to a provider and in the component we need to use the prop value we wrap the return statement with a consumer and pass in children prop as a function which returns the needed jsx from that component
+> may ways to play with context must look look the codeevaluation3 videos again for reference
+> e.g. we can provide a default value for context, which will be used if no contextProvider is provided for contextConsumer
+> Very Imp to understand the flow: https://www.youtube.com/watch?v=NEYrSUM4Umw&list=PLC3y8-rFHvwgg3vaYJgHGnModB54rxOk3&index=42
+>  Take a look a formic in react

@@ -3,3 +3,4 @@
 > Graphs to see total amount spent of a specific item, may be add a category for the same and show chart accordingly
 > Log In Using Oauth only and option to exort directly to your google account
 > All user details using Profile Photo will be taken from google
+> add focus on page load inn input field in case of login
