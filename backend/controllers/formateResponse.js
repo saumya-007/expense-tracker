@@ -1,30 +1,16 @@
-function formatResponse(
-    {contentType, status, statusCode, body, headers}) {
+function formatResponse({ contentType, status, statusCode, body, headers }) {
   const formattedResponse = {
     statusCode: statusCode,
     headers: headers ? headers : {},
+    body,
   };
-  if (body instanceof Error) {
-    formattedResponse.body = {
-      message: body.message,
-      name: body.name,
-      code: body.errorCode,
-    };
-    formattedResponse.headers['content-type'] = 'application/json';
-  } else {
-    formattedResponse.body = {
-      status: status ? status : 'success',
-      data: body,
-    };
-    formattedResponse.headers['content-type'] = contentType ? contentType : 'application/json';
-  }
+  formattedResponse.headers['content-type'] = contentType ? contentType : 'application/json';
   return formattedResponse;
 }
 
-function formatError({error}) {
-  console.log(error);
+function formatError({ error }) {
   return formatResponse({
-    status: 'error', 
+    status: 'error',
     statusCode: error.httpStatusCode ? error.httpStatusCode : 500,
     body: {
       message: error.message,
@@ -34,4 +20,4 @@ function formatError({error}) {
   });
 }
 
-module.exports = {formatResponse, formatError};
+module.exports = { formatResponse, formatError };

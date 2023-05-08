@@ -4,24 +4,49 @@ const CATEGORY_TABLE_NAME = 'expense_category'
 function makeExpenseDb({ database, cockroach, UnknownError }) {
 
   return Object.freeze({
-    addUserExpenses,
+    addExpense,
     getCategoryByName,
     addCategory,
   });
 
   // user expense table
-  async function addUserExpenses({ fields, fieldValues }) {
+  async function addExpense({
+    activity,
+    categoryId,
+    amount,
+    isAboveLimit,
+    userId,
+  }) {
     try {
-      const values = [];
+      const fields = [
+        'activity',
+        'category_id',
+        'amount',
+        'is_above_limit',
+        'created_at',
+        'created_by',
+        'modified_at',
+        'modified_by',
+      ]
+      const values = [
+        activity,
+        categoryId,
+        amount,
+        isAboveLimit,
+        new Date(),
+        userId,
+        new Date(),
+        userId,
+      ];
+
       const query = `
                       INSERT INTO
                         ${EXPENSE_TABLE_NAME}
                             (${fields})
                       VALUES 
-                          ${fieldValues.map(
-                            (fields) =>
-                              `(${fields.map((values) => `'${values}'`)})`
-                          )}`;
+                          (${values.map((_, index) => `$${index+1}`)})
+                      RETURNING id;
+                    `;
       // console.log(query);
       const result = await cockroach.executeQuery({
         database,
@@ -32,7 +57,7 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       if (!result || !result.rows || !result.rows.length) {
         return [];
       }
-      return result;
+      return result.rows[0];
     } catch (e) {
       console.error('makeExpenseDb : addUserExpenses');
       console.error(e);
@@ -46,7 +71,9 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     fieldsToQuery,
   }) {
     try {
-      const values = [categoryName];
+      const values = [
+        categoryName
+      ];
       const query = `
                   SELECT 
                     ${fieldsToQuery}
@@ -55,17 +82,15 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
                   WHERE
                     category_name = $1;
                   `;
-      console.log(query);
       const result = await cockroach.executeQuery({
         database,
         query,
         values,
       });
-
       if (!result || !result.rows || !result.rows.length) {
         return false;
       }
-      return result;
+      return result.rows[0];
     } catch (e) {
       console.error('makeExpenseDb : getCategoryByName');
       console.error(e);
@@ -85,29 +110,35 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         'modified_by',
         'modified_at',
       ];
-      const values = [categoryName, userId, new Date(), userId, new Date()];
+      const values = [
+        categoryName,
+        userId,
+        new Date(),
+        userId,
+        new Date()
+      ];
+      console.log(values);
       const query = `
                   INSERT INTO 
                     ${CATEGORY_TABLE_NAME}
                   (${fields})
                     VALUES
-                  (${values.map((_, index) => '$'+index+1)})
+                  (${values.map((_, index) => '$'+(index+1))})
                   RETURNING
                     id;
                   `;
-      console.log(query);
+      // console.log(query);
       const result = await cockroach.executeQuery({
         database,
         query,
         values,
       });
-
       if (!result || !result.rows || !result.rows.length) {
         return false;
       }
-      return result[0];
+      return result.rows[0];
     } catch (e) {
-      console.error('makeExpenseDb : getCategoryByName');
+      console.error('makeExpenseDb : addCategory');
       console.error(e);
       throw new UnknownError();
     }

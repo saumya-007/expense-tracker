@@ -2,11 +2,15 @@ module.exports = function makeGetCategoryByName({
     expensedb,
     Joi,
     getErrorMessage,
+    convertToCammelCase,
     categoryTableFields,
     ValidationError,
 }) {
     return async function getCategoryByName({categoryName}) {
         validateExpenseData({ categoryName });
+
+        categoryName = convertToCammelCase(categoryName);
+
         return await expensedb.getCategoryByName({
             categoryName,
             fieldsToQuery: categoryTableFields,

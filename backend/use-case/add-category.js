@@ -8,17 +8,23 @@ module.exports = function makeAddCategory({
     AlreadyExistsError,
   }) {
     return async function addCategory({
-      categoryName
+      categoryName,
+      userId,
     }) {
-      // add functionality to add created by at and modified by at
       validateCategoryData({categoryName});
+      console.log(categoryName)
       categoryName = convertToCammelCase(categoryName);
-      const expense_category = getCategoryByName({categoryName});
+      console.log(categoryName)
+      const expense_category = await getCategoryByName({categoryName});
+      
       if (expense_category) {
         throw new AlreadyExistsError('EX-00002', getErrorMessage('EX-00002'));
       }
   
-      return await expensedb.addCategory({expense_category});
+      return await expensedb.addCategory({
+        categoryName,
+        userId,
+      });
     };
   
     function validateCategoryData({categoryName}) {
