@@ -2,11 +2,8 @@ class ServiceUtils {
     constructor() {}
     
     static getFunctions() {
-
-        const converter = new Converters()
-
         return Object.freeze({
-            convertToCammelCase: converter.convertToCammelCase,
+            convertToCammelCase: Converters.convertToCammelCase,
         })
     }
   
@@ -16,9 +13,13 @@ class Converters {
     constructor() {}
 
     static convertToCammelCase(stringInput){
-        return stringInput.toLowerCase().replace(stringInput[0], stringInput[0].toUpperCase());
+        const words = stringInput.trim().split(' ');
+        console.log(words);
+        return words.map((word) => word.toLowerCase().replace(word[0], word[0].toUpperCase())).join(' ');
     };
 }
-  
+
+console.log(Converters.convertToCammelCase('Saumya Dixit saasdas'));
+
 module.exports = ServiceUtils;
   

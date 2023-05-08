@@ -3,7 +3,7 @@ class ErrorUtils {
     this.errors = errors;
   }
 
-  static getErrorMessageFromCode(errorCode){
+  getErrorMessageFromCode(errorCode){
     return this.errors[`${errorCode}`] ? this.errors[`${errorCode}`] : 'Something went wrong';
 };
 }
