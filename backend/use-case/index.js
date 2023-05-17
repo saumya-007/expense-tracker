@@ -1,21 +1,22 @@
 const Joi = require('joi');
 const { ValidationError, AlreadyExistsError, ObjectNotFoundError } = require('../exceptions');
 const { expensedb } = require('../data-access');
-const { ERRORS, CATEGORY_TABLE } = require('../utils/constants');
+const { ERRORS, CATEGORY_TABLE, EXPENSE_TABLE } = require('../utils/constants');
 
 const ErrorUtils = require('../utils/ErrorUtils');
 const getErrorMessage = new ErrorUtils({ errors: ERRORS }).getErrorMessageFromCode.bind(new ErrorUtils({ errors: ERRORS }));
 
 const ServiceUtils = require('../utils/ServiceUtils');
-const {convertToCammelCase} = ServiceUtils.getFunctions.bind(ServiceUtils)();
-console.log(convertToCammelCase);
+const {capitalizeFirstLetters} = ServiceUtils.getFunctions.bind(ServiceUtils)();
+const fs = require('fs')
+const {parse} = require('csv-parse');
 
 const makeGetCategoryByName = require('./get-category-by-name');
 const getCategoryByName = makeGetCategoryByName({
   expensedb,
   Joi,
   getErrorMessage,
-  convertToCammelCase,
+  capitalizeFirstLetters,
   categoryTableFields: CATEGORY_TABLE,
   ValidationError,
 })
@@ -25,7 +26,7 @@ const addCategory = makeAddCategory({
   expensedb,
   Joi,
   getErrorMessage,
-  convertToCammelCase,
+  capitalizeFirstLetters,
   getCategoryByName,
   ValidationError,
   AlreadyExistsError,
@@ -36,7 +37,7 @@ const addExpense = makeAddExpense({
   expensedb,
   Joi,
   getErrorMessage,
-  convertToCammelCase,
+  capitalizeFirstLetters,
   getCategoryByName,
   addCategory,
   categoryTableFields: CATEGORY_TABLE,
@@ -44,6 +45,20 @@ const addExpense = makeAddExpense({
   AlreadyExistsError,
 });
 
+const makeImportExpense = require('./import-expenses');
+const importExpense = makeImportExpense({
+  Joi,
+  fs,
+  parse,
+  getErrorMessage,
+  capitalizeFirstLetters,
+  addExpense,
+  expenseTableFields: EXPENSE_TABLE,
+  ValidationError,
+  AlreadyExistsError,
+});
+
 module.exports = Object.freeze({
   addExpense,
+  importExpense,
 });

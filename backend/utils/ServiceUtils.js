@@ -1,25 +1,32 @@
 class ServiceUtils {
-    constructor() {}
-    
+    constructor() { }
+
     static getFunctions() {
         return Object.freeze({
-            convertToCammelCase: Converters.convertToCammelCase,
+            capitalizeFirstLetters: Converters.capitalizeFirstLetters,
+            generateRandomNumber: Generators.generateRandomNumber
         })
     }
-  
+
 }
 
 class Converters {
-    constructor() {}
+    constructor() { }
 
-    static convertToCammelCase(stringInput){
-        const words = stringInput.trim().split(' ');
-        console.log(words);
-        return words.map((word) => word.toLowerCase().replace(word[0], word[0].toUpperCase())).join(' ');
+    static capitalizeFirstLetters({str, withSpace = false, skipFirst = false}) {
+        let regex;
+        skipFirst ? regex = /( )([^ ]?)/g : regex = /( |^)([^ ]?)/g;
+        return str.replace(regex, function (_, prep, letter) {
+            return (prep && withSpace ? ' ' : '') + letter.toUpperCase();
+        });
     };
 }
 
-console.log(Converters.convertToCammelCase('Saumya Dixit saasdas'));
+class Generators {
+    constructor() { }
+    static generateRandomNumber() {
+        return Date.now() + '-' + Math.round(Math.random() * 1E9);
+    }
+}
 
 module.exports = ServiceUtils;
-  

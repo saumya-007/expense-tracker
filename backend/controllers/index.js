@@ -1,5 +1,6 @@
 const {
-  addExpense
+  addExpense,
+  importExpense,
 } = require('../use-case');
 const {formatResponse, formatError} = require('./formateResponse');
 const {DEAULT_SPEND_LIMIT} = require('../utils/constants');
@@ -12,6 +13,14 @@ const addExpenseAction = makeAddExpenseAction({
     DEAULT_SPEND_LIMIT,
   });
 
+  const makeImportExpensesAction = require('./import-expenses');
+  const importExpensesAction = makeImportExpensesAction({
+      importExpense,
+      formatResponse,
+      formatError,
+    });
+
 module.exports = Object.freeze({
-  addExpenseAction
+  addExpenseAction,
+  importExpensesAction
 });

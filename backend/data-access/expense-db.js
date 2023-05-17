@@ -16,6 +16,8 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     amount,
     isAboveLimit,
     userId,
+    spentOn,
+    spendLimit
   }) {
     try {
       const fields = [
@@ -27,6 +29,8 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         'created_by',
         'modified_at',
         'modified_by',
+        'spent_on',
+        'spend_limit'
       ]
       const values = [
         activity,
@@ -37,6 +41,8 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         userId,
         new Date(),
         userId,
+        spentOn,
+        spendLimit
       ];
 
       const query = `
@@ -44,10 +50,9 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
                         ${EXPENSE_TABLE_NAME}
                             (${fields})
                       VALUES 
-                          (${values.map((_, index) => `$${index+1}`)})
+                          (${values.map((_, index) => `$${index + 1}`)})
                       RETURNING id;
                     `;
-      // console.log(query);
       const result = await cockroach.executeQuery({
         database,
         query,
@@ -117,17 +122,15 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         userId,
         new Date()
       ];
-      console.log(values);
       const query = `
                   INSERT INTO 
                     ${CATEGORY_TABLE_NAME}
                   (${fields})
                     VALUES
-                  (${values.map((_, index) => '$'+(index+1))})
+                  (${values.map((_, index) => '$' + (index + 1))})
                   RETURNING
                     id;
                   `;
-      // console.log(query);
       const result = await cockroach.executeQuery({
         database,
         query,

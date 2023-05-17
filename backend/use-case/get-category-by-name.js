@@ -2,14 +2,19 @@ module.exports = function makeGetCategoryByName({
     expensedb,
     Joi,
     getErrorMessage,
-    convertToCammelCase,
+    capitalizeFirstLetters,
     categoryTableFields,
     ValidationError,
 }) {
-    return async function getCategoryByName({categoryName}) {
+    return async function getCategoryByName({ categoryName }) {
+
+        console.log(`
+            @ categoryName: ${categoryName},
+        `)
+
         validateExpenseData({ categoryName });
 
-        categoryName = convertToCammelCase(categoryName);
+        categoryName = capitalizeFirstLetters({ str: categoryName, withSpace: false, skipFirst: false });
 
         return await expensedb.getCategoryByName({
             categoryName,
@@ -23,8 +28,8 @@ module.exports = function makeGetCategoryByName({
         });
         const { error } = schema.validate({ categoryName });
         if (error) {
-          const message = getErrorMessage('EX-00001') || ''  + error.message;
-          throw new ValidationError('EX-00001', message);
+            const message = getErrorMessage('EX-00001') || '' + error.message;
+            throw new ValidationError('EX-00001', message);
         }
-      }
+    }
 }

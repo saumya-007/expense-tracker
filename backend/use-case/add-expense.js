@@ -3,7 +3,7 @@ module.exports = function makeAddExpense({
   Joi,
   getErrorMessage,
   addCategory,
-  convertToCammelCase,
+  capitalizeFirstLetters,
   getCategoryByName,
   ValidationError,
   AlreadyExistsError,
@@ -14,6 +14,7 @@ module.exports = function makeAddExpense({
     amount,
     userId,
     categoryName,
+    spentOn,
   }) {
 
     console.log(`
@@ -22,6 +23,7 @@ module.exports = function makeAddExpense({
       @ amount: ${amount},
       @ userId: ${userId},
       @ categoryName: ${categoryName},
+      @ spentOn: ${spentOn}
     `)
 
     validateExpenseData({
@@ -30,15 +32,14 @@ module.exports = function makeAddExpense({
       amount,
       userId,
       categoryName,
+      spentOn,
     });
 
     let categoryId;
-    categoryName = convertToCammelCase(categoryName);
-    console.log(categoryName);
-    const expenseCategory = await getCategoryByName({categoryName});
-    console.log(expenseCategory);
+    categoryName = capitalizeFirstLetters({ str: categoryName, withSpace: false, skipFirst: false });
+    const expenseCategory = await getCategoryByName({ categoryName });
     if (!expenseCategory) {
-        const newExpenseCategory = await addCategory({
+      const newExpenseCategory = await addCategory({
         categoryName,
         userId
       });
@@ -47,15 +48,19 @@ module.exports = function makeAddExpense({
     else {
       categoryId = expenseCategory['id'];
     }
-    console.log(parseFloat(amount) > parseFloat(spendLimit));
     return await expensedb.addExpense({
       activity,
       categoryId,
       amount,
       isAboveLimit: parseFloat(amount) > parseFloat(spendLimit),
       userId,
+      spentOn,
+      spendLimit,
     });
-    return true;
+
+    /**
+     * TO DO - add code to delete added category if some how add fails
+     */
   };
 
   function validateExpenseData({
@@ -64,6 +69,7 @@ module.exports = function makeAddExpense({
     amount,
     userId,
     categoryName,
+    spentOn,
   }) {
     const schema = Joi.object({
       activity: Joi.string().required(),
@@ -71,6 +77,7 @@ module.exports = function makeAddExpense({
       amount: Joi.number().required(),
       userId: Joi.string().guid().required(),
       categoryName: Joi.string().required(),
+      spentOn: Joi.date().max(new Date())
     });
     const { error } = schema.validate({
       activity,
@@ -78,9 +85,10 @@ module.exports = function makeAddExpense({
       amount,
       userId,
       categoryName,
+      spentOn,
     });
     if (error) {
-      const message = getErrorMessage('EX-00001') || ''  + error.message;
+      const message = getErrorMessage('EX-00001') || '' + error.message;
       throw new ValidationError('EX-00001', message);
     }
   }
