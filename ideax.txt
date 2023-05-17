@@ -4,3 +4,10 @@
 > Log In Using Oauth only and option to exort directly to your google account
 > All user details using Profile Photo will be taken from google
 > add focus on page load inn input field in case of login
+> need to think about spend limit
+
+>> PHASE 1 target.
+> adding expense using form and excel, getting expense
+> setting spend limit for the day and or month and refresh accordingly
+> graphs for daily expense based on category and activity 
+> in all apis check for the userId validity in controller itself
