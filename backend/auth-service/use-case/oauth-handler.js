@@ -1,6 +1,6 @@
 module.exports = function makeOauthHandler({
     jwt,
-    getGoogleOauthToken,
+    getGoogleAccessToken,
     getGoogleUser,
     addUser,
     oauthConfig,
@@ -18,7 +18,7 @@ module.exports = function makeOauthHandler({
                 redirect_uri: oauthConfig.redirectUrl,
                 ...googleOauthTokenConfig,
             };
-            const { id_token, access_token } = await getGoogleOauthToken({
+            const { id_token, access_token } = await getGoogleAccessToken({
                 url: tokenUrl,
                 options: tokenOptions
             });
@@ -47,28 +47,24 @@ module.exports = function makeOauthHandler({
                 picture,
             } = jwt.decode(id_token);
 
-            if (email_verified) {
-                await addUser({
-                    email,
-                    name,
-                    first_name: given_name,
-                    last_name: family_name,
-                    profile_photo_url: picture,
-                  });
+            if (!email_verified) {
+                const message = getErrorMessage('EX-00005') || '' + error.message;
+                throw new ValidationError('EX-00005', message);
             }
 
-            return {
+            return ({
                 email,
-                email_verified,
                 name,
-                given_name,
-                family_name,
-                picture,
-            };
+                first_name: given_name,
+                last_name: family_name,
+                profile_photo_url: picture,
+              });
+
+            // return true;
         } catch (error) {
             console.log(error);
-            const message = getErrorMessage('EX-00004') || '' + error.message;
-            throw new ValidationError('EX-00004', message);
+            const message = getErrorMessage('EX-00001') || '' + error.message;
+            throw new ValidationError('EX-00001', message);
         }
     }
 }

@@ -1,9 +1,9 @@
-module.exports = function makeGetGoogleOauthToken({
+module.exports = function makeGetGoogleAccessToken({
     axios,
     AuthenticationFailed,
     getErrorMessage,
 }) {
-    return async function getGoogleOauthToken({ url, options }) {
+    return async function getGoogleAccessToken({ url, options }) {
         return axios({
             method: 'post',
             url,
@@ -16,8 +16,8 @@ module.exports = function makeGetGoogleOauthToken({
         }).catch((error) => {
             console.log(error);
             if (error && error.response && error.response.data && error.response.data.Error) {
-                const message = getErrorMessage('EX-00005') || '' + error.message;
-                throw new AuthenticationFailed('EX-00005', message);
+                const message = getErrorMessage('EX-00002') || '' + error.message;
+                throw new AuthenticationFailed('EX-00002', message);
             }
             throw error;
         });

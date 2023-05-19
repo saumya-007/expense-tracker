@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
  * Exposed Endpoints
  */
 const route = express.Router();
-route.get('/v1/get-oauth-link', makeHttpCallBack(controllers.getOauthLinkAction));
+route.get('/v1/get-signup-link', makeHttpCallBack(controllers.getGoogleSignUpLinkAction));
 route.get('/v1/oauth/google', makeHttpCallBack(controllers.oauthHandlerAction));
 
 /**

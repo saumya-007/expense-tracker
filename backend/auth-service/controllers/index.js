@@ -1,12 +1,12 @@
 const {
-  getOauthLink,
+  getGoogleSignUpLink,
   oauthHandler,
 } = require('../use-case');
 const { formatResponse, formatError } = require('./formateResponse');
 
-const makeGetOauthLinkAction = require('./get-oauth-link');
-const getOauthLinkAction = makeGetOauthLinkAction({
-  getOauthLink,
+const makeGetGoogleSignUpLinkAction = require('./get-google-signup-link');
+const getGoogleSignUpLinkAction = makeGetGoogleSignUpLinkAction({
+  getGoogleSignUpLink,
   formatResponse,
   formatError,
 })
@@ -19,6 +19,6 @@ const oauthHandlerAction = makeOauthHandlerAction({
 })
 
 module.exports = Object.freeze({
-  getOauthLinkAction,
+  getGoogleSignUpLinkAction,
   oauthHandlerAction
 });

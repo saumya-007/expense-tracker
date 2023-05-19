@@ -29,8 +29,8 @@ module.exports = function makeAddUser({
         }).catch((error) => {
             console.log(error);
             if (error && error.response && error.response.data && error.response.data.Error) {
-                const message = getErrorMessage('EX-00007') || '' + error.message;
-                throw new UnknownError('EX-00007', message);
+                const message = getErrorMessage('EX-00004') || '' + error.message;
+                throw new UnknownError('EX-00004', message);
             }
             throw error;
         });

@@ -1,9 +1,9 @@
-module.exports = function makeGetOauthLink({
+module.exports = function makeGoogleSignUpLink({
     buildOauthLink,
     oauthConfig,
     googleOauthOptionsConfig,
 }) {
-    return function getOauthLink() {
+    return function getGoogleSignUpLink() {
         return buildOauthLink({
             oauthConfig,
             googleOauthOptionsConfig,

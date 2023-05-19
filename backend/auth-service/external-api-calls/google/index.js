@@ -4,8 +4,8 @@ const { ERRORS } = require('../../utils/constants');
 const ErrorUtils = require('../../utils/ErrorUtils');
 const getErrorMessage = new ErrorUtils({ errors: ERRORS }).getErrorMessageFromCode.bind(new ErrorUtils({ errors: ERRORS }));
 
-const makeGetGoogleOauthToken = require('./get-google-oauth-token');
-const getGoogleOauthToken = makeGetGoogleOauthToken({
+const makeGetGoogleAccessToken = require('./get-google-access-token');
+const getGoogleAccessToken = makeGetGoogleAccessToken({
     axios,
     AuthenticationFailed,
     getErrorMessage,
@@ -19,6 +19,6 @@ const getGoogleUser = makeGetGoogleUser({
 });
 
 module.exports = Object.freeze({
-    getGoogleOauthToken,
+    getGoogleAccessToken,
     getGoogleUser,
 })
