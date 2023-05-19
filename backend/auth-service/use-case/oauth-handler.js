@@ -2,6 +2,7 @@ module.exports = function makeOauthHandler({
     jwt,
     getGoogleOauthToken,
     getGoogleUser,
+    addUser,
     oauthConfig,
     googleOauthTokenConfig,
     getErrorMessage,
@@ -22,7 +23,7 @@ module.exports = function makeOauthHandler({
                 options: tokenOptions
             });
 
-            /** Alternative
+            /** Alternative to what is done below
              * 
             const userInfoUrl = oauthConfig.userInfoUrl
             const userInfoOptions = {
@@ -47,10 +48,23 @@ module.exports = function makeOauthHandler({
             } = jwt.decode(id_token);
 
             if (email_verified) {
-                
+                await addUser({
+                    email,
+                    name,
+                    first_name: given_name,
+                    last_name: family_name,
+                    profile_photo_url: picture,
+                  });
             }
 
-            return userDetails;
+            return {
+                email,
+                email_verified,
+                name,
+                given_name,
+                family_name,
+                picture,
+            };
         } catch (error) {
             console.log(error);
             const message = getErrorMessage('EX-00004') || '' + error.message;

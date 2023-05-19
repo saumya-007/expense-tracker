@@ -1,15 +1,13 @@
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
-const { ValidationError, AlreadyExistsError, ObjectNotFoundError } = require('../exceptions');
-const { ERRORS, CATEGORY_TABLE, EXPENSE_TABLE } = require('../utils/constants');
+const { ValidationError } = require('../exceptions');
+const { ERRORS } = require('../utils/constants');
 
 const ErrorUtils = require('../utils/ErrorUtils');
 const getErrorMessage = new ErrorUtils({ errors: ERRORS }).getErrorMessageFromCode.bind(new ErrorUtils({ errors: ERRORS }));
 
-const ServiceUtils = require('../utils/ServiceUtils');
-const { capitalizeFirstLetters } = ServiceUtils.getFunctions.bind(ServiceUtils)();
-
-const { getGoogleOauthToken, getGoogleUser } = require('../external-api-calls/google')
+const { getGoogleOauthToken, getGoogleUser } = require('../external-api-calls');
+const { addUser } = require('../internal-service-call');
 
 const { googleOauthOptionsConfig, googleOauthTokenConfig } = require('../config').backendConfig;
 const oauthConfig = require('../google-oauth-creds');
@@ -22,13 +20,14 @@ const getOauthLink = makeGetOauthLink({
   buildOauthLink,
   oauthConfig,
   googleOauthOptionsConfig,
-})
+});
 
 const makeOauthHandler = require('./oauth-handler');
 const oauthHandler = makeOauthHandler({
   jwt,
   getGoogleOauthToken,
   getGoogleUser,
+  addUser,
   oauthConfig,
   googleOauthTokenConfig,
   getErrorMessage,
