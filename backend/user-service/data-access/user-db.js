@@ -59,6 +59,12 @@ function makeuserdb({ database, cockroach, UnknownError }) {
     }
   }
 
+  async function updateUser({
+
+  }) {
+    
+  }
+
   async function getUserByEmail({
     email,
     fieldsToQuery,

@@ -39,7 +39,8 @@ module.exports = function makeAddUser({
     const userDetails = await getUserByEmail({ email });
     
     if (userDetails) {
-      return userDetails['id'];
+      const message = getErrorMessage('EX-00001') || '' + error.message;
+      throw new ValidationError('EX-00001', message);
     }
     return await userdb.addUser({
       email,

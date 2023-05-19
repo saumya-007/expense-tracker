@@ -29,6 +29,16 @@ const addUser = makeAddUser({
   ValidationError,
 });
 
+const makeUpdateUser = require('./update-user');
+const updateUser = makeUpdateUser({
+  userdb,
+  Joi,
+  getErrorMessage,
+  getUserByEmail,
+  ValidationError,
+});
+
 module.exports = Object.freeze({
   addUser,
+  updateUser,
 });
