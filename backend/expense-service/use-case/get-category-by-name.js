@@ -28,8 +28,8 @@ module.exports = function makeGetCategoryByName({
         });
         const { error } = schema.validate({ categoryName });
         if (error) {
-            const message = getErrorMessage('EX-00001') || '' + error.message;
-            throw new ValidationError('EX-00001', message);
+            const message = [(getErrorMessage('ER-00001') || ''), error.message].join(', ');
+            throw new ValidationError('ER-00001', message);
         }
     }
 }

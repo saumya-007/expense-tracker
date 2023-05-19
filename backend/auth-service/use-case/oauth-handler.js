@@ -48,11 +48,10 @@ module.exports = function makeOauthHandler({
             } = jwt.decode(id_token);
 
             if (!email_verified) {
-                const message = getErrorMessage('EX-00005') || '' + error.message;
-                throw new ValidationError('EX-00005', message);
+                throw new ValidationError('ER-00005', getErrorMessage('ER-00005'));
             }
 
-            return ({
+            await addUser ({
                 email,
                 name,
                 first_name: given_name,
@@ -60,11 +59,10 @@ module.exports = function makeOauthHandler({
                 profile_photo_url: picture,
               });
 
-            // return true;
+            return true;
         } catch (error) {
-            console.log(error);
-            const message = getErrorMessage('EX-00001') || '' + error.message;
-            throw new ValidationError('EX-00001', message);
+            const message = [(getErrorMessage('ER-00001') || ''), error.message].join(', ');
+            throw new ValidationError('ER-00001', message);
         }
     }
 }

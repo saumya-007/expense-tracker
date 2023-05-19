@@ -27,10 +27,9 @@ module.exports = function makeAddUser({
         }).then((response) => {
             return response.data
         }).catch((error) => {
-            console.log(error);
-            if (error && error.response && error.response.data && error.response.data.Error) {
-                const message = getErrorMessage('EX-00004') || '' + error.message;
-                throw new UnknownError('EX-00004', message);
+            if (error && error.response && error.response.data && error.response.data.message) {
+                const message = [(getErrorMessage('ER-00004') || ''), error.response.data.message].join(', ');
+                throw new UnknownError('ER-00004', message);
             }
             throw error;
         });

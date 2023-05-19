@@ -39,8 +39,7 @@ module.exports = function makeAddUser({
     const userDetails = await getUserByEmail({ email });
     
     if (userDetails) {
-      const message = getErrorMessage('EX-00001') || '' + error.message;
-      throw new ValidationError('EX-00001', message);
+      throw new ValidationError('ER-00002', getErrorMessage('ER-00002'));
     }
     return await userdb.addUser({
       email,
@@ -77,9 +76,8 @@ module.exports = function makeAddUser({
       profile_photo_url,
     });
     if (error) {
-      console.log(error);
-      const message = getErrorMessage('EX-00001') || '' + error.message;
-      throw new ValidationError('EX-00001', message);
+      const message = [(getErrorMessage('ER-00001') || ''), error.message].join(', ');
+      throw new ValidationError('ER-00001', message);
     }
   }
 };

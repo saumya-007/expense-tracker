@@ -54,8 +54,8 @@ module.exports = function makeImportExpense({
             if (index === 0) {
                 const isHeadersValid = row.sort().toString() === expenseTableFields.sort().toString(); expenseTableFields
                 if (!isHeadersValid) {
-                    const message = getErrorMessage('EX-00003') || '';
-                    throw new ValidationError('EX-00003', message);
+                    const message = getErrorMessage('ER-00003') || '';
+                    throw new ValidationError('ER-00003', message);
                 }
             } else {
                 headers.forEach((header, index) => {
@@ -94,8 +94,8 @@ module.exports = function makeImportExpense({
         });
         if (error) {
             console.log(error);
-            const message = getErrorMessage('EX-00003') || '' + error.message;
-            throw new ValidationError('EX-00003', message);
+            const message = [(getErrorMessage('ER-00003') || ''), error.message].join(', ');
+            throw new ValidationError('ER-00003', message);
         }
     }
 }

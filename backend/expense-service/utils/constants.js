@@ -1,7 +1,7 @@
 const ERRORS = {
-  'EX-00001': 'Invalid input provided',
-  'EX-00002': 'Category already exist',
-  'EX-00003': 'Invalid csv format'
+  'ER-00001': 'Invalid input provided',
+  'ER-00002': 'Category already exist',
+  'ER-00003': 'Invalid csv format'
 }
 
 const CATEGORY_TABLE = ['id', 'category_name'];

@@ -39,8 +39,7 @@ module.exports = function makeUpdateUser({
       const userDetails = await getUserByEmail({ email });
 
       if (!userDetails) {
-        const message = getErrorMessage('EX-00003') || '' + error.message;
-        throw new ValidationError('EX-00003', message);
+        throw new ValidationError('ER-00003', getErrorMessage('ER-00003'));
       }
       
       email = email ? email : userDetails['email'];
@@ -87,8 +86,8 @@ module.exports = function makeUpdateUser({
       });
       if (error) {
         console.log(error);
-        const message = getErrorMessage('EX-00001') || '' + error.message;
-        throw new ValidationError('EX-00001', message);
+        const message = [(getErrorMessage('ER-00001') || ''), error.message].join(', ');
+        throw new ValidationError('ER-00001', message);
       }
     }
   };

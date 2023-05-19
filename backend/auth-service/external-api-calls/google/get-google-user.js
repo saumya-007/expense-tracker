@@ -15,9 +15,9 @@ module.exports = function makeGetGoogleUser({
             return response.data
         }).catch((error) => {
             console.log(error);
-            if (error && error.response && error.response.data && error.response.data.Error) {
-                const message = getErrorMessage('EX-00003') || '' + error.message;
-                throw new AuthenticationFailed('EX-00003', message);
+            if (error && error.response && error.response.data && error.response.data.message) {
+                const message = [(getErrorMessage('ER-00003') || ''), error.response.data.message].join(', ');
+                throw new AuthenticationFailed('ER-00003', message);
             }
             throw error;
         });

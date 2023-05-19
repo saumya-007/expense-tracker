@@ -15,9 +15,9 @@ module.exports = function makeGetGoogleAccessToken({
             return response.data
         }).catch((error) => {
             console.log(error);
-            if (error && error.response && error.response.data && error.response.data.Error) {
-                const message = getErrorMessage('EX-00002') || '' + error.message;
-                throw new AuthenticationFailed('EX-00002', message);
+            if (error && error.response && error.response.data && error.response.data.message) {
+                const message = [(getErrorMessage('ER-00002') || ''), error.response.data.message].join(', ');
+                throw new AuthenticationFailed('ER-00002', message);
             }
             throw error;
         });
