@@ -7,6 +7,7 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     addExpense,
     getCategoryByName,
     addCategory,
+    getUserExpense,
   });
 
   // user expense table
@@ -146,6 +147,49 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       throw new UnknownError();
     }
   }
+
+  async function getUserExpense({
+    userId,
+  }) {
+    try {
+      const values = [
+        userId
+      ];
+      const fields = [
+        'activity',
+        'category_name',
+        'amount',
+        'is_above_limit',
+        'spent_on'
+      ]
+      const query = `
+                    SELECT 
+                      ${fields.map(field => field === 'category_name' ? `cat.${field}` : `ex.${field}`)}
+                    FROM
+                      ${EXPENSE_TABLE_NAME} ex
+                    LEFT JOIN
+                      ${CATEGORY_TABLE_NAME} cat
+                    ON 
+                      ex.category_id = cat.id
+                    WHERE
+                      ex.user_id = $1;
+                    `;
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return [];
+      }
+      return result.rows;
+    } catch (e) {
+      console.error('makeExpenseDb : getUserExpense');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
 }
 
 module.exports = makeExpenseDb;

@@ -29,6 +29,7 @@ const upload = multer({ storage: storage })
 const route = express.Router();
 route.post('/v1/add-expense', makeHttpCallBack(controllers.addExpenseAction));
 route.post('/v1/import-expense' , upload.single('expense-data'), makeHttpCallBack(controllers.importExpensesAction));
+route.get('/v1/get-user-expense', makeHttpCallBack(controllers.getUserExpenseAction));
 
 /**
  * Middlewares

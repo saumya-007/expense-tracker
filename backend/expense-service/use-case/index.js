@@ -7,9 +7,10 @@ const ErrorUtils = require('../utils/ErrorUtils');
 const getErrorMessage = new ErrorUtils({ errors: ERRORS }).getErrorMessageFromCode.bind(new ErrorUtils({ errors: ERRORS }));
 
 const ServiceUtils = require('../utils/ServiceUtils');
-const {capitalizeFirstLetters} = ServiceUtils.getFunctions.bind(ServiceUtils)();
+const { capitalizeFirstLetters } = ServiceUtils.getFunctions.bind(ServiceUtils)();
+
 const fs = require('fs')
-const {parse} = require('csv-parse');
+const { parse } = require('csv-parse');
 
 const makeGetCategoryByName = require('./get-category-by-name');
 const getCategoryByName = makeGetCategoryByName({
@@ -58,7 +59,16 @@ const importExpense = makeImportExpense({
   AlreadyExistsError,
 });
 
+const makeGetUserExpense = require('./get-user-expense');
+const getUserExpense = makeGetUserExpense({
+  expensedb,
+  Joi,
+  getErrorMessage,
+  ValidationError,
+})
+
 module.exports = Object.freeze({
   addExpense,
   importExpense,
+  getUserExpense,
 });

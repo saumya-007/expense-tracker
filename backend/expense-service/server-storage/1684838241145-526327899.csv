@@ -1,0 +1,4 @@
+activity,amount,spend limit,category name,spent on
+some activity,200,100,some category,"December 17,1995 03:24:00"
+some activity 2,400,40,some category,"December 17, 1995 03:24:00"
+some activity 3,100,1000,some category 3,"December 17, 1995 03:24:00"
