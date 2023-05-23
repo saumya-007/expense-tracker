@@ -14,7 +14,25 @@ const addUser = makeAddUser({
     getErrorMessage,
 });
 
+const makeGetUserById = require('./get-user-by-id');
+const getUserById = makeGetUserById({
+    config,
+    axios,
+    UnknownError,
+    getErrorMessage,
+});
+
+const makeGetUserByEmail = require('./get-user-by-email');
+const getUserByEmail = makeGetUserByEmail({
+    config,
+    axios,
+    UnknownError,
+    getErrorMessage,
+});
+
 module.exports = Object.freeze({
     addUser,
+    getUserById,
+    getUserByEmail,
 })
 

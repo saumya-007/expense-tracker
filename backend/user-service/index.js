@@ -13,6 +13,9 @@ const bodyParser = require('body-parser');
  */
 const route = express.Router();
 route.post('/v1/add-user', makeHttpCallBack(controllers.adduserAction));
+route.get('/v1/get-user-by-id/:userId', makeHttpCallBack(controllers.getUserByIdAction));
+route.get('/v1/get-user-by-email/:email', makeHttpCallBack(controllers.getUserByEmailAction));
+route.put('/v1/update-user/:userId', makeHttpCallBack(controllers.updateUserAction));
 
 /**
  * Middlewares

@@ -1,7 +1,8 @@
 const ERRORS = {
   'ER-00001': 'Invalid input provided',
   'ER-00002': 'User with the same email already exists already registered',
-  'ER-00003': 'User does not exists'
+  'ER-00003': 'User does not exists',
+  'ER-00004': 'Error while getting user'
 }
 
 const USER_TABLE = [

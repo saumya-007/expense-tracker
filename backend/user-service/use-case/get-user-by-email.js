@@ -5,25 +5,27 @@ module.exports = function makegetUserByEmail({
     userTableFields,
     ValidationError,
 }) {
-    return async function getUserByEmail({ email }) {
+    return async function getUserByEmail({ email, isAuthServiceCall }) {
 
         console.log(`
             @ email: ${email},
+            @ isAuthServiceCall" ${isAuthServiceCall}
         `)
 
-        validateUserData({ email });
+        validateUserData({ email, isAuthServiceCall });
 
         return await userdb.getUserByEmail({
             email,
-            fieldsToQuery: userTableFields,
+            fieldsToQuery: isAuthServiceCall ? [ 'password' , ...userTableFields]:  userTableFields,
         });
     }
 
-    function validateUserData({ email }) {
+    function validateUserData({ email, isAuthServiceCall }) {
         const schema = Joi.object({
-            email: Joi.string().email().required()
+            email: Joi.string().email().required(),
+            isAuthServiceCall: Joi.boolean(),
         });
-        const { error } = schema.validate({ email });
+        const { error } = schema.validate({ email, isAuthServiceCall });
         if (error) {
             const message = [(getErrorMessage('ER-00001') || ''), error.message].join(', ');
             throw new ValidationError('ER-00001', message);

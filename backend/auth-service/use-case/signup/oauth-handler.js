@@ -18,7 +18,7 @@ module.exports = function makeOauthHandler({
                 redirect_uri: oauthConfig.redirectUrl,
                 ...googleOauthTokenConfig,
             };
-            const { id_token, access_token } = await getGoogleAccessToken({
+            const { id_token } = await getGoogleAccessToken({
                 url: tokenUrl,
                 options: tokenOptions
             });

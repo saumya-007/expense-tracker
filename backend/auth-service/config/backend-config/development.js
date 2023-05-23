@@ -1,7 +1,7 @@
 const config = {
     cockroachCloudCluster: {
-      connectionString: '',
-      dbName: ''
+      connectionString: 'postgresql://saumya:u9TW21iLXLBGV5RvMuAC5A@expense-tracker-2882.7s5.cockroachlabs.cloud:26257/authdb?sslmode=verify-full',
+      dbName: 'authdb'
     },
     googleOauthOptionsConfig: {
       access_type: 'offline',
@@ -14,6 +14,10 @@ const config = {
     },
     googleOauthTokenConfig: {
       grant_type: 'authorization_code' 
+    },
+    defaultAlgorithm: 'aes-256-cbc',
+    tokenConfig: {
+      tokenKey: 'SOME_TOKEN_KEY',
     }
   };
   module.exports = config;

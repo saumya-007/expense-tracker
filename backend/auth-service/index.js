@@ -14,6 +14,9 @@ const bodyParser = require('body-parser');
 const route = express.Router();
 route.get('/v1/get-signup-link', makeHttpCallBack(controllers.getGoogleSignUpLinkAction));
 route.get('/v1/oauth/google', makeHttpCallBack(controllers.oauthHandlerAction));
+route.post('/v1/authenticate', makeHttpCallBack(controllers.authenticateUserAction));
+// use it as middleware in all other applications in callback or something
+route.post('/v1/verify-access-token', makeHttpCallBack(controllers.verifyAccessTokenAction));
 
 /**
  * Middlewares
