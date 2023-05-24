@@ -8,6 +8,7 @@ const makeHttpCallBack = require('./http-server-callback');
 const controllers = require('./controllers');
 const bodyParser = require('body-parser');
 
+const cors = require('cors');
 /**
  * Exposed Endpoints
  */
@@ -22,6 +23,7 @@ route.put('/v1/update-user/:userId', makeHttpCallBack(controllers.updateUserActi
  */
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(`/${config.serviceConfig.serviceEndPoint.name}`, route);
 

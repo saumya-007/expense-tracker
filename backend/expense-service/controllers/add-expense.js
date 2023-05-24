@@ -13,7 +13,7 @@ module.exports = function makeAddExpenseAction({
       const spentOn = httpRequest.body.spent_on;
 
       // take from access token after auth service implementation
-      const userId = '00000000-0000-0000-0000-000000000000';
+      const userId = 'a9827099-9494-4cd4-9411-3cf8c6c37126';
       const response = await addExpense({activity, spendLimit, amount, categoryName, userId, spentOn});
       return formatResponse({ contentType: 'application/json', statusCode: 200 , body: { item: response }});
     } catch (error) {

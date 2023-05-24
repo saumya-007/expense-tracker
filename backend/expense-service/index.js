@@ -5,6 +5,7 @@ const express = require('express');
 const config = require('./config');
 const multer = require('multer');
 const { join, extname } = require('path');
+const cors = require('cors');
 
 const makeHttpCallBack = require('./http-server-callback');
 const controllers = require('./controllers');
@@ -36,6 +37,7 @@ route.get('/v1/get-user-expense', makeHttpCallBack(controllers.getUserExpenseAct
  */
 const app = express();
 app.use(express.json());
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(`/${config.serviceConfig.serviceEndPoint.name}`, route);
 

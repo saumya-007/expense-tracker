@@ -7,7 +7,7 @@ module.exports = function makeImportExpensesAction({
   return async function importExpensesAction(httpRequest) {
     try {
       const file = httpRequest.file;
-      const userId = '00000000-0000-0000-0000-000000000000';
+      const userId = 'a9827099-9494-4cd4-9411-3cf8c6c37126';
       const response = await importExpense({ file, userId });
       return formatResponse({ contentType: 'application/json', statusCode: 200, body: { item: response } });
     } catch (error) {

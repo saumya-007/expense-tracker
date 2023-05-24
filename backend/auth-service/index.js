@@ -7,6 +7,7 @@ const config = require('./config');
 const makeHttpCallBack = require('./http-server-callback');
 const controllers = require('./controllers');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 /**
  * Exposed Endpoints
@@ -23,6 +24,7 @@ route.post('/v1/verify-access-token', makeHttpCallBack(controllers.verifyAccessT
  */
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(`/${config.serviceConfig.serviceEndPoint.name}`, route);
 
