@@ -1723,3 +1723,28 @@ video {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+.popup {
+  position: fixed;
+  top:20%;
+  left: 30%;
+  width:auto;
+  height:auto;
+  background-color:transparent;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.popup-inner {
+  position: relative;
+  padding: 50px;
+  width: 100%;
+  max-width: 640px;
+  background-color: transparent;
+}
+
+/* .popup-inner .close-btn{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+} */
