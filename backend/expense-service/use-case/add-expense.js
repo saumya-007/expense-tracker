@@ -34,9 +34,9 @@ module.exports = function makeAddExpense({
       categoryName,
       spentOn,
     });
-
+    activity = capitalizeFirstLetters({ str: activity, withSpace: true, skipFirst: false })
     let categoryId;
-    categoryName = capitalizeFirstLetters({ str: categoryName, withSpace: false, skipFirst: false });
+    categoryName = capitalizeFirstLetters({ str: categoryName, withSpace: true, skipFirst: false });
     const expenseCategory = await getCategoryByName({ categoryName });
     if (!expenseCategory) {
       const newExpenseCategory = await addCategory({

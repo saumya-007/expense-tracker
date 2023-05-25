@@ -18,7 +18,7 @@ module.exports = function makeAddCategory({
     `)
 
     validateCategoryData({ categoryName });
-    categoryName = capitalizeFirstLetters({ str: categoryName, withSpace: false, skipFirst: false });
+    categoryName = capitalizeFirstLetters({ str: categoryName, withSpace: true, skipFirst: false });
     const expense_category = await getCategoryByName({ categoryName });
 
     if (expense_category) {
