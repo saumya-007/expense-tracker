@@ -64,11 +64,32 @@ const getUserExpense = makeGetUserExpense({
   expensedb,
   Joi,
   getErrorMessage,
+  capitalizeFirstLetters,
   ValidationError,
-})
+});
+
+const makeUpdateUserExpense = require('./update-user-expense');
+const updateUserExpense = makeUpdateUserExpense({
+  expensedb,
+  Joi,
+  getErrorMessage,
+  capitalizeFirstLetters,
+  ValidationError,
+});
+
+const makeDeleteUserExpense = require('./delete-user-expense');
+const deleteUserExpense = makeDeleteUserExpense({
+  expensedb,
+  Joi,
+  getErrorMessage,
+  ValidationError,
+  ObjectNotFoundError,
+});
 
 module.exports = Object.freeze({
   addExpense,
   importExpense,
   getUserExpense,
+  deleteUserExpense,
+  updateUserExpense
 });

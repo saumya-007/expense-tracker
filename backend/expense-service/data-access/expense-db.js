@@ -8,9 +8,12 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     getCategoryByName,
     addCategory,
     getUserExpense,
+    deleteUserExpense,
+    updateUserExpense,
+    getExpenseById
   });
 
-  // user expense table
+
   async function addExpense({
     activity,
     categoryId,
@@ -73,7 +76,6 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     }
   }
 
-  // category table
   async function getCategoryByName({
     categoryName,
     fieldsToQuery,
@@ -152,18 +154,26 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
 
   async function getUserExpense({
     userId,
+    expenseId,
   }) {
     try {
       const values = [
         userId
       ];
       const fields = [
+        'id',
         'activity',
         'category_name',
         'amount',
         'is_above_limit',
         'spent_on'
       ]
+
+      if (expenseId) {
+        fields.push('category_id')
+        values.push(expenseId);
+      }
+
       const query = `
                     SELECT 
                       ${fields.map(field => field === 'category_name' ? `cat.${field}` : `ex.${field}`)}
@@ -174,7 +184,45 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
                     ON 
                       ex.category_id = cat.id
                     WHERE
-                      ex.user_id = $1;
+                      ex.user_id = $1
+                    ${expenseId ?
+                    `AND
+                      ex.id = $2
+                    `:
+                    ''
+                    };
+                    `;
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return expenseId ? false : [];
+      }
+      return expenseId ? result.rows[0] : result.rows;
+    } catch (e) {
+      console.error('makeExpenseDb : getUserExpense');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
+  async function deleteUserExpense({
+    expenseId,
+  }) {
+    try {
+      const values = [
+        expenseId
+      ];
+      const query = `
+                    DELETE 
+                      FROM
+                    ${EXPENSE_TABLE_NAME}
+                      WHERE
+                    id = $1
+                      RETURNING
+                    id;
                     `;
       const result = await cockroach.executeQuery({
         database,
@@ -186,7 +234,97 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       }
       return result.rows;
     } catch (e) {
-      console.error('makeExpenseDb : getUserExpense');
+      console.error('makeExpenseDb : deleteUserExpense');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
+  async function updateUserExpense({
+    expenseId,
+    activity,
+    categoryId,
+    amount,
+    isAboveLimit,
+    spendLimit,
+    spentOn,
+    userId,
+  }) {
+    try {
+      const values = [
+        expenseId,
+        activity,
+        categoryId,
+        amount,
+        isAboveLimit,
+        spendLimit,
+        spentOn,
+        userId,
+        new Date(),
+      ];
+      const fields = [
+        'activity',
+        'category_id',
+        'amount',
+        'is_above_limit',
+        'spend_limit',
+        'spent_on',
+        'modified_by',
+        'modified_at'
+      ]
+      const query = `
+                    UPDATE 
+                      ${EXPENSE_TABLE_NAME}
+                    SET
+                      ${fields.map((field, index) => `${field} = $${index + 2}`)}
+                    WHERE
+                      id = $1
+                    RETURNING
+                      id;
+                    `;
+      console.log(values)
+      console.log(query)
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return [];
+      }
+      return result.rows;
+    } catch (e) {
+      console.error('makeExpenseDb : updateUserExpense');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
+  async function getExpenseById({
+    expenseId,
+    fieldsToQuery,
+  }) {
+    try {
+      const values = [expenseId];
+      const query = `
+                    SELECT
+                      ${fieldsToQuery ? fieldsToQuery : 'activity, amount'}
+                    FROM
+                      ${EXPENSE_TABLE_NAME}
+                    WHERE
+                      id = $1;
+                    `;
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return false;
+      }
+      return result.rows[0];
+    } catch (e) {
+      console.error('makeExpenseDb : getExpenseById');
       console.error(e);
       throw new UnknownError();
     }
