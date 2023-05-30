@@ -9,7 +9,6 @@ module.exports = function makeUpdateExpense({
         userId,
         expenseId,
         activity,
-        spendLimit,
         amount,
         categoryName,
         spentOn
@@ -19,7 +18,6 @@ module.exports = function makeUpdateExpense({
         @ userId: ${userId}
         @ expenseId: ${expenseId},
         @ activity: ${activity},
-        @ spendLimit: ${spendLimit},
         @ amount: ${amount},
         @ categoryName: ${categoryName},
         @ spentOn: ${spentOn} 
@@ -28,23 +26,29 @@ module.exports = function makeUpdateExpense({
         validateData({
             expenseId,
             activity,
-            spendLimit,
             amount,
             categoryName,
             spentOn
         });
+
+        const spendLimitDetails = await expensedb.getSpendLimitForSpentOn({ spentOn, fieldsToQuery:['id', 'spend_limit'] });
+
+        if (!spendLimitDetails) {
+        throw new ValidationError('ER-00012', getErrorMessage('ER-00012'));
+        }
 
         /**
          > Getting all details from expense db joined with category db
          > If category name changes and if that category does not exist in db then add new category else take that id and update it in expense db
          */
         const userExpenses = await expensedb.getUserExpense({ userId, expenseId });
-
+        console.log(spendLimitDetails)
         expenseId = expenseId ? expenseId : userExpenses.expenseId;
         activity = activity ? activity : userExpenses.activity;
-        spendLimit = spendLimit ? spendLimit : userExpenses.spendLimit;
         amount = amount ? amount : userExpenses.amount;
-        spentOn = spentOn ? spentOn : userExpenses.spentOn;
+        spentOn = spentOn ? spentOn : userExpenses.spent_on;
+        isAboveLimit = parseFloat(amount) > parseFloat(spendLimitDetails['spend_limit']);
+        isSpentLimitChanged = userExpenses['is_spent_limit_changed'] ? false :  true;
 
         let categoryId = null;
 
@@ -71,10 +75,10 @@ module.exports = function makeUpdateExpense({
             activity: capitalizeFirstLetters({str: activity, withSpace: true, skipFirst: false }),
             categoryId,
             amount,
-            isAboveLimit: parseFloat(amount) > parseFloat(spendLimit), 
-            spendLimit,
+            isAboveLimit,
             spentOn,
             userId,
+            isSpentLimitChanged,
         })
     };
 

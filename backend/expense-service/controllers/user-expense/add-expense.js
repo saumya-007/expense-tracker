@@ -7,14 +7,13 @@ module.exports = function makeAddExpenseAction({
   return async function addExpenseAction(httpRequest) {
     try {
       const activity = httpRequest.body.activity;
-      const spendLimit = httpRequest.body.spend_limit ? httpRequest.body.spend_limit : DEAULT_SPEND_LIMIT;
       const amount = httpRequest.body.amount;
       const categoryName = httpRequest.body.category_name;
       const spentOn = httpRequest.body.spent_on;
 
       // take from access token after auth service implementation
       const userId = 'a9827099-9494-4cd4-9411-3cf8c6c37126';
-      const response = await addExpense({activity, spendLimit, amount, categoryName, userId, spentOn});
+      const response = await addExpense({activity, amount, categoryName, userId, spentOn});
       return formatResponse({ contentType: 'application/json', statusCode: 200 , body: { item: response }});
     } catch (error) {
       console.error(error);

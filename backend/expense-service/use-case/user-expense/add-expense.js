@@ -10,7 +10,6 @@ module.exports = function makeAddExpense({
 }) {
   return async function addExpense({
     activity,
-    spendLimit,
     amount,
     userId,
     categoryName,
@@ -19,7 +18,6 @@ module.exports = function makeAddExpense({
 
     console.log(`
       @ activity: ${activity},
-      @ spendLimit: ${spendLimit},
       @ amount: ${amount},
       @ userId: ${userId},
       @ categoryName: ${categoryName},
@@ -28,12 +26,18 @@ module.exports = function makeAddExpense({
 
     validateExpenseData({
       activity,
-      spendLimit,
       amount,
       userId,
       categoryName,
       spentOn,
     });
+
+    const spendLimitDetails = await expensedb.getSpendLimitForSpentOn({ spentOn, fieldsToQuery:['id', 'spend_limit'] });
+
+    if (!spendLimitDetails) {
+      throw new ValidationError('ER-00012', getErrorMessage('ER-00012'));
+    }
+
     activity = capitalizeFirstLetters({ str: activity, withSpace: true, skipFirst: false })
     let categoryId;
     categoryName = capitalizeFirstLetters({ str: categoryName, withSpace: true, skipFirst: false });
@@ -48,14 +52,15 @@ module.exports = function makeAddExpense({
     else {
       categoryId = expenseCategory['id'];
     }
+    console.log(spendLimitDetails);
     return await expensedb.addExpense({
       activity,
       categoryId,
       amount,
-      isAboveLimit: parseFloat(amount) > parseFloat(spendLimit),
+      isAboveLimit: parseFloat(amount) > parseFloat(spendLimitDetails['spend_limit']),
       userId,
       spentOn,
-      spendLimit,
+      spendLimit: spendLimitDetails['id'],
     });
 
     /**
@@ -65,7 +70,6 @@ module.exports = function makeAddExpense({
 
   function validateExpenseData({
     activity,
-    spendLimit,
     amount,
     userId,
     categoryName,
@@ -73,7 +77,6 @@ module.exports = function makeAddExpense({
   }) {
     const schema = Joi.object({
       activity: Joi.string().required(),
-      spendLimit: Joi.number().required(),
       amount: Joi.number().required(),
       userId: Joi.string().guid().required(),
       categoryName: Joi.string().required(),
@@ -81,7 +84,6 @@ module.exports = function makeAddExpense({
     });
     const { error } = schema.validate({
       activity,
-      spendLimit,
       amount,
       userId,
       categoryName,

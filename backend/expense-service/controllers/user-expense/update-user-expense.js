@@ -7,7 +7,6 @@ module.exports = function makeUpdateUserExpenseAction({
         try {
             const expenseId = httpRequest.params.expenseId;
             const activity = httpRequest.body.activity;
-            const spendLimit = httpRequest.body.spend_limit;
             const amount = httpRequest.body.amount;
             const categoryName = httpRequest.body.category_name;
             const spentOn = httpRequest.body.spent_on;
@@ -16,7 +15,6 @@ module.exports = function makeUpdateUserExpenseAction({
                 userId,
                 expenseId,
                 activity,
-                spendLimit,
                 amount,
                 categoryName,
                 spentOn

@@ -34,6 +34,11 @@ route.get('/v1/get-user-expense', makeHttpCallBack(controllers.getUserExpenseAct
 route.delete('/v1/delete-user-expense/:expenseId', makeHttpCallBack(controllers.deleteUserExpenseAction));
 route.put('/v1/update-user-expense/:expenseId', makeHttpCallBack(controllers.updateUserExpenseAction));
 
+route.post('/v1/add-spend-limit', makeHttpCallBack(controllers.addSpendLimitAction));
+route.get('/v1/get-all-spend-limit', makeHttpCallBack(controllers.getAllSpendLimitAction));
+route.delete('/v1/delete-spend-limit/:spendLimitId', makeHttpCallBack(controllers.deleteSpendLimitAction));
+route.put('/v1/update-spend-limit/:spendLimitId', makeHttpCallBack(controllers.updateSpendLimitAction));
+
 /**
  * Middlewares
  */

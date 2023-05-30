@@ -18,3 +18,9 @@ CREATE TABLE expense_category (
         created_by  UUID NOT NULL,
         modified_at TIMESTAMP  NOT NULL DEFAULT now(),
         modified_by UUID NOT NULL);
+-- CREATE SPEND LIMIT TABLE
+create table spend_limit (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        spend_limit DECIMAL NOT null,
+        start_date TIMESTAMP NOT NULL DEFAULT now(),
+        end_date TIMESTAMP NOT NULL DEFAULT now())
