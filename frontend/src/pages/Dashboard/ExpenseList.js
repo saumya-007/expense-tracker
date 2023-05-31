@@ -1,42 +1,49 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import config from '../../../config';
+import config from '../../config';
 
-import Table from '../../../components/Table';
-import TableHeader from '../../../components/TableHeader';
-import TableBody from '../../../components/TableBody';
-import PaginationFooter from '../../../components/PaginationFooter';
-import TableRow from '../../../components/TableRow';
-import TableData from '../../../components/TableData';
-import Icon from '../../../components/Icon';
-import Button from '../../../components/Button';
-import constants from '../../../utils/constants';
+import noDataImage from '../../images/no_data_found.jpg'
+
+import Table from '../../components/Table';
+import TableHeader from '../../components/TableHeader';
+import TableBody from '../../components/TableBody';
+import PaginationFooter from '../../components/PaginationFooter';
+import TableRow from '../../components/TableRow';
+import TableData from '../../components/TableData';
+import Icon from '../../components/Icon';
+import Button from '../../components/Button';
+import constants from '../../utils/constants';
 
 const ExpenseList = (props) => {
-  const noExpenseAddedMsg = constants.DEFAULT_MSG_FOR_NO_EXPENSE_RECORD;
 
   const [expensesData, setExpenseData] = useState();
   const headers = ['Category', 'Activity', 'Amount', 'Spent Date', 'Options'];
 
-  const editIcon = (
-    <Icon iconClass="fa fa-edit" fontSize="17px" fontColor="green" />
-  );
-  const deleteIcon = (
-    <Icon iconClass="fa fa-trash-o" fontSize="17px" fontColor="red" />
-  );
+  const editIcon = <Icon iconClass="fa fa-edit" fontSize="17px" fontColor="green" />;
+  const deleteIcon = <Icon iconClass="fa fa-trash-o" fontSize="17px" fontColor="red" />;
 
-  const editHandler = (event) => {
-    console.log('Edit called');
-    // edit api call
+  const editHandler = (id) => {
   };
 
-  const deleteHandler = (event) => {
-    console.log('Delete called');
-    // delete api call
+  const deleteHandler = (id) => {
+    axios({
+      method: 'DELETE',
+      url: `${config.backendPoints['EXPENSE-SERVICE']}/v1/delete-user-expense/${id}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then((response) => {
+      console.log(response.data.item);
+      props.setIsAddExpensePopupTriggered(!props.isAddExpensePopupTriggered)
+    }).catch((error) => {
+      if (error && error.response && error.response.data && error.response.data.message) {
+        return error.response.data.message;
+      }
+      return 'API error'
+    });
   };
 
   useEffect(() => {
-    console.log('expense list')
     axios({
       method: 'GET',
       url: `${config.backendPoints['EXPENSE-SERVICE']}/v1/get-user-expense`,
@@ -47,7 +54,6 @@ const ExpenseList = (props) => {
       console.log(response.data.item)
       setExpenseData(response.data.item);
     }).catch((error) => {
-      console.log(error)
       if (error && error.response && error.response.data && error.response.data.message) {
         return error.response.data.message;
       }
@@ -100,14 +106,14 @@ const ExpenseList = (props) => {
             buttonColor="white"
             buttonTextColor="black"
             px="5"
-            handler={editHandler}
+            onClick={() => editHandler(id)}
           />
           <Button
             icon={deleteIcon}
             buttonColor="white"
             buttonTextColor="black"
             px="5"
-            handler={deleteHandler}
+            onClick={() => deleteHandler(id)}
           />
         </TableData>
       </TableRow>
@@ -115,20 +121,26 @@ const ExpenseList = (props) => {
   });
 
   return (
-    <div className="w-full overflow-hidden rounded-lg shadow-xs">
-      {rows?.length ?
-        <>
-          <Table>
-            <TableHeader headers={headers} />
-            <TableBody>{rows}</TableBody>
-          </Table><PaginationFooter />
-        </>
-        :
-        <>
-          {noExpenseAddedMsg}
-        </>
+    <>
+      {
+        rows?.length ?
+          <>
+            <Table>
+              <TableHeader headers={headers} />
+              <TableBody>{rows}</TableBody>
+            </Table>
+            <PaginationFooter />
+          </>
+          :
+          <div className="center-div">
+            <img
+              src={noDataImage}
+              alt="No Data Found !"
+              aria-hidden="true"
+            />
+          </div>
       }
-    </div>
+    </>
   );
 };
 

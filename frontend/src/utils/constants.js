@@ -1,8 +1,8 @@
 const constants = Object.freeze({
     APP_TITLE: 'Expense Tracker',
     EXPENSE_LIST_TITLE:'Expense History',
+    GRAPH_TITLE: 'Graph Views',
     SEARCH_PLACE_HOLDER: 'Search for Activity',
-    DEFAULT_MSG_FOR_NO_EXPENSE_RECORD: 'Please add expense data !',
     MONTH_MAPPING: {
         0:'Jan',
         1:'Feb',

@@ -1,25 +1,27 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-import Header from './pages/Dashboard/Header/Header';
-import Body from './pages/Dashboard/Body/Body';
+import Header from './pages/Header/Header';
+import BodyRouting from './Routing/BodyRouting';
+
+export const popupTriggeredContext = React.createContext();
 
 function App() {
-  const [isAddPopupTriggered, setIsAddExpensePopupTriggered] = useState(false);
-  const [isUploadPopupTriggered, setIsUploadExpensePopupTriggered] = useState(false);
-
+  const [isAddExpensePopupTriggered, setIsAddExpensePopupTriggered] = useState(false);
+  const [isUploadExpensePopupTriggered, setIsUploadExpensePopupTriggered] = useState(false);
+  // const [isUpdateExpensePopupTriggered, setIsUpdateExpensePopupTriggered] = useState(false);
   return (
     <div className="App">
       <Header
-        isAddPopupTriggered={isAddPopupTriggered}
+        isAddExpensePopupTriggered={isAddExpensePopupTriggered}
         setIsAddExpensePopupTriggered={setIsAddExpensePopupTriggered}
-        isUploadPopupTriggered={isUploadPopupTriggered}
+        isUploadExpensePopupTriggered={isUploadExpensePopupTriggered}
         setIsUploadExpensePopupTriggered={setIsUploadExpensePopupTriggered}
       />
-      <Body
-        isAddPopupTriggered={isAddPopupTriggered}
+      <BodyRouting
+        isAddExpensePopupTriggered={isAddExpensePopupTriggered}
         setIsAddExpensePopupTriggered={setIsAddExpensePopupTriggered}
-        isUploadPopupTriggered={isUploadPopupTriggered}
+        isUploadExpensePopupTriggered={isUploadExpensePopupTriggered}
         setIsUploadExpensePopupTriggered={setIsUploadExpensePopupTriggered}
       />
     </div>

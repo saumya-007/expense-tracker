@@ -1,16 +1,13 @@
-import React from 'react'
-
-
-import { useRef } from 'react';
+import React, { useRef } from 'react'
 import axios from 'axios';
-import config from '../../../config';
 
-import Card from '../../../components/Card';
-import Input from '../../../components/Input';
-import Button from '../../../components/Button';
+import config from '../../config';
+
+import Card from '../../components/Card';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 const AddExpenseForm = (props) => {
-
     const activityRef = useRef(null)
     const amountRef = useRef(null)
     const dateRef = useRef(null)
@@ -25,7 +22,7 @@ const AddExpenseForm = (props) => {
 
         axios({
             method: 'POST',
-            url: `${config.backendPoints['EXPENSE-SERVICE']}/v1/add-expense`,
+            url: `${config.backendPoints['EXPENSE-SERVICE']}/v1/add-user-expense`,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -37,7 +34,7 @@ const AddExpenseForm = (props) => {
             }
         }).then((response) => {
             console.log(response.data.item)
-            props.setIsAddExpensePopupTriggered(!props.isAddPopupTriggered)
+            props.setIsAddExpensePopupTriggered(!props.isAddExpensePopupTriggered)
         }).catch((error) => {
             console.log(error)
             if (error && error.response && error.response.data && error.response.data.message) {
@@ -79,7 +76,7 @@ const AddExpenseForm = (props) => {
                     buttonValue="Add"
                     buttonColor="purple"
                     buttonTextColor="white"
-                    handler={addNewExpense}
+                    onClick={addNewExpense}
                 />
             </Card>
         </>

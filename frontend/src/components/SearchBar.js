@@ -16,7 +16,7 @@ const SearchBar = (props) => {
             inputType="text"
             label="Search"
             placeholder={constants.SEARCH_PLACE_HOLDER}
-            handler={handler} 
+            onClick={handler} 
           />
         </div>
       </div>
