@@ -2,7 +2,10 @@ import React, { useRef, useEffect, useState } from 'react'
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 
-const UploadFileForm = (props) => {
+const UploadFileForm = () => {
+
+  console.log('Upload Expense Form Rendered');
+
   const [file, setFile] = useState();
   const drop = useRef(null);
 
@@ -23,7 +26,7 @@ const UploadFileForm = (props) => {
   };
 
   const handleUpload = (e) => {
-    console.log(file);
+    // console.log(file);
   }
 
   useEffect(() => {

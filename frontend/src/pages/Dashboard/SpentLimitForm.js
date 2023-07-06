@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
-import Input from './Input';
-import Button from './Button';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
-const SpentLimitForm = (props) => {
+const SpentLimitForm = () => {
     
     const PROPS = {};
     PROPS['startDate'] = new Date();

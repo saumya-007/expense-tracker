@@ -5,12 +5,7 @@ const BodyRouting = (porps) => {
     return (
         <Routes>
             <Route exact path="dashboard/*" element={
-                <Body
-                    isAddExpensePopupTriggered={porps.isAddExpensePopupTriggered}
-                    setIsAddExpensePopupTriggered={porps.setIsAddExpensePopupTriggered}
-                    isUploadExpensePopupTriggered={porps.isUploadExpensePopupTriggered}
-                    setIsUploadExpensePopupTriggered={porps.setIsUploadExpensePopupTriggered}
-                />
+                <Body />
             }>
             </Route>
         </Routes>

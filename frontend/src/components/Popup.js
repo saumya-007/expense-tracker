@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 
 const Popup = (props) => {
@@ -23,5 +24,5 @@ const Popup = (props) => {
   ) : "";
 }
 
-export default Popup
+export default React.memo(Popup);
 

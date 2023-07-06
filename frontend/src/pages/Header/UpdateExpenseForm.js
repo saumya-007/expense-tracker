@@ -9,10 +9,9 @@ import Button from '../../components/Button';
 
 import { popupTriggeredContext } from '../../App';
 
-const AddExpenseForm = () => {
+const UpdateExpenseForm = (props) => {
 
-    console.log('Add Expense Form Rendered');
-
+    console.log('Update Expense Form Rendered');
     const popupTriggeredCnxt = useContext(popupTriggeredContext);
 
     const activityRef = useRef(null)
@@ -20,7 +19,7 @@ const AddExpenseForm = () => {
     const dateRef = useRef(null)
     const categoryRef = useRef(null)
 
-    const addNewExpense = (event) => {
+    const updateExpense = (event) => {
         event.preventDefault();
         const activity = activityRef.current.value;
         const amount = amountRef.current.value;
@@ -60,34 +59,39 @@ const AddExpenseForm = () => {
                     placeholder="Enter Activity"
                     reference={activityRef}
                     inputType="text"
+                    value={props.updateExpenseData.activity}
                 />
                 <Input
                     lable="Amount"
                     placeholder="Enter Amount"
                     reference={amountRef}
                     inputType="number"
+                    value={props.updateExpenseData.amount}
                 />
                 <Input
                     lable="Date"
                     placeholder="Enter Date"
                     reference={dateRef}
                     inputType="date"
+                    defaultValue={new Date(props.updateExpenseData.spent_on)}
+                    
                 />
                 <Input
                     lable="Category"
                     placeholder="Enter Category"
                     reference={categoryRef}
                     inputType="text"
+                    value={props.updateExpenseData.category_name}
                 />
                 <Button
                     buttonValue="Add"
                     buttonColor="purple"
                     buttonTextColor="white"
-                    onClick={addNewExpense}
+                    onClick={updateExpense}
                 />
             </Card>
         </>
     )
 }
 
-export default AddExpenseForm;
+export default UpdateExpenseForm;
