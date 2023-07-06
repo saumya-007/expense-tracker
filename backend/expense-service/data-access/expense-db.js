@@ -180,7 +180,7 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       ]
 
       if (expenseId) {
-        fields.push('category_id')
+        fields.push('category_id');
         values.push(expenseId);
       }
 

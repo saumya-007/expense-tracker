@@ -11,7 +11,8 @@ const ERRORS = {
   'ER-00010': 'Date range overlapping',
   'ER-00011': 'Error while updating spend limit',
   'ER-00012': 'Spend Limit does not belong to any range, please add a new range',
-  'ER-00013': 'Error while updateing isSpentLimitChanged flag'
+  'ER-00013': 'Error while updateing isSpentLimitChanged flag',
+  'ER-00014': 'Error while exporting user expense',
 }
 
 const CATEGORY_TABLE = ['id', 'category_name'];

@@ -30,6 +30,7 @@ const upload = multer({ storage: storage })
 const route = express.Router();
 route.post('/v1/add-user-expense', makeHttpCallBack(controllers.addExpenseAction));
 route.post('/v1/import-user-expense' , upload.single('expense-data'), makeHttpCallBack(controllers.importExpensesAction));
+route.get('/v1/export-user-expense' , makeHttpCallBack(controllers.exportExpenseAction));
 route.get('/v1/get-user-expense', makeHttpCallBack(controllers.getUserExpenseAction));
 route.delete('/v1/delete-user-expense/:expenseId', makeHttpCallBack(controllers.deleteUserExpenseAction));
 route.put('/v1/update-user-expense/:expenseId', makeHttpCallBack(controllers.updateUserExpenseAction));

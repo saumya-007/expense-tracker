@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const config = require('../../config');
 const { ValidationError, AlreadyExistsError, ObjectNotFoundError } = require('../../exceptions');
 const { expensedb } = require('../../data-access');
 const { ERRORS, CATEGORY_TABLE, EXPENSE_TABLE } = require('../../utils/constants');
@@ -92,7 +93,17 @@ const updateIsSpendLimitChangedFlag = makeUpdateIsSpendLimitChangedFlag({
   expensedb,
   getErrorMessage,
   ValidationError
-})
+});
+
+const makeExportExpense = require('./export-expense');
+const exportExpense = makeExportExpense({
+  Joi,
+  config,
+  getUserExpense,
+  getErrorMessage,
+  ValidationError,
+  ObjectNotFoundError,
+}) 
 
 module.exports = Object.freeze({
   addExpense,
@@ -100,5 +111,6 @@ module.exports = Object.freeze({
   getUserExpense,
   deleteUserExpense,
   updateUserExpense,
-  updateIsSpendLimitChangedFlag
+  updateIsSpendLimitChangedFlag,
+  exportExpense
 });
