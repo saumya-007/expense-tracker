@@ -7,6 +7,7 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
   return Object.freeze({
     addExpense,
     getCategoryByName,
+    getCategoryById,
     addCategory,
     getUserExpense,
     deleteUserExpense,
@@ -95,7 +96,7 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       ];
       const query = `
                   SELECT 
-                    ${fieldsToQuery}
+                    ${fieldsToQuery ? fieldsToQuery : '*'}
                   FROM
                     ${CATEGORY_TABLE_NAME}
                   WHERE
@@ -112,6 +113,38 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       return result.rows[0];
     } catch (e) {
       console.error('makeExpenseDb : getCategoryByName');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
+  async function getCategoryById({
+    categoryId,
+    fieldsToQuery,
+  }) {
+    try {
+      const values = [
+        categoryId
+      ];
+      const query = `
+                  SELECT 
+                    ${fieldsToQuery ? fieldsToQuery : '*'}
+                  FROM
+                    ${CATEGORY_TABLE_NAME}
+                  WHERE
+                    id = $1;
+                  `;
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return false;
+      }
+      return result.rows[0];
+    } catch (e) {
+      console.error('makeExpenseDb : getCategoryById');
       console.error(e);
       throw new UnknownError();
     }
@@ -318,7 +351,7 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       const values = [expenseId];
       const query = `
                     SELECT
-                      ${fieldsToQuery ? fieldsToQuery : 'activity, amount'}
+                      ${fieldsToQuery ? fieldsToQuery : '*'}
                     FROM
                       ${EXPENSE_TABLE_NAME}
                     WHERE

@@ -69,6 +69,16 @@ const getUserExpense = makeGetUserExpense({
   ValidationError,
 });
 
+const makeGetUserExpenseById = require('./get-user-expense-by-id');
+const getUserExpenseById = makeGetUserExpenseById({
+  expensedb,
+  Joi,
+  getErrorMessage,
+  capitalizeFirstLetters,
+  ValidationError,
+});
+
+
 const makeUpdateUserExpense = require('./update-user-expense');
 const updateUserExpense = makeUpdateUserExpense({
   expensedb,
@@ -112,5 +122,6 @@ module.exports = Object.freeze({
   deleteUserExpense,
   updateUserExpense,
   updateIsSpendLimitChangedFlag,
-  exportExpense
+  exportExpense,
+  getUserExpenseById,
 });

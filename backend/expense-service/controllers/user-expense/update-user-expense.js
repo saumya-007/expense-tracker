@@ -19,7 +19,7 @@ module.exports = function makeUpdateUserExpenseAction({
                 categoryName,
                 spentOn
             });
-            return formatResponse({ contentType: 'application/json', statusCode: 200, body: { item: response } });
+            return formatResponse({ contentType: 'application/json', statusCode: 204, body: { item: response } });
         } catch (error) {
             console.error(error);
             return formatError({ error });

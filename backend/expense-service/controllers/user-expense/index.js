@@ -5,6 +5,7 @@ const {
   updateUserExpense,
   deleteUserExpense,
   exportExpense,
+  getUserExpenseById,
 } = require('../../use-case');
 const { formatResponse, formatError } = require('../formateResponse');
 const { DEAULT_SPEND_LIMIT } = require('../../utils/constants');
@@ -27,6 +28,13 @@ const importExpensesAction = makeImportExpensesAction({
 const makeGetUserExpenseAction = require('./get-user-expense');
 const getUserExpenseAction = makeGetUserExpenseAction({
   getUserExpense,
+  formatResponse,
+  formatError,
+});
+
+const makeGetUserExpenseByIdAction = require('./get-user-expense-by-id');
+const getUserExpenseByIdAction = makeGetUserExpenseByIdAction({
+  getUserExpenseById,
   formatResponse,
   formatError,
 });
@@ -59,4 +67,5 @@ module.exports = Object.freeze({
   updateUserExpenseAction,
   deleteUserExpenseAction,
   exportExpenseAction,
+  getUserExpenseByIdAction,
 });

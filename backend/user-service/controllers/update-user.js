@@ -22,7 +22,7 @@ module.exports = function makeUpdateUserAction({
                 profile_photo_url,
                 password,
             });
-            return formatResponse({ contentType: 'application/json', statusCode: 200, body: { item: response } });
+            return formatResponse({ contentType: 'application/json', statusCode: 204, body: { item: response } });
         } catch (error) {
             console.error(error);
             return formatError({ error });
