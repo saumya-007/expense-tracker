@@ -1,7 +1,9 @@
 const Joi = require('joi');
+const config = require('../../config');
 const { ValidationError, AlreadyExistsError, ObjectNotFoundError } = require('../../exceptions');
 const { expensedb } = require('../../data-access');
-const { ERRORS, CATEGORY_TABLE, EXPENSE_TABLE } = require('../../utils/constants');
+const { ERRORS, CATEGORY_TABLE, EXPENSE_TABLE, MONTHS } = require('../../utils/constants');
+const moment = require('moment');
 
 const ErrorUtils = require('../../utils/ErrorUtils');
 const getErrorMessage = new ErrorUtils({ errors: ERRORS }).getErrorMessageFromCode.bind(new ErrorUtils({ errors: ERRORS }));
@@ -65,8 +67,29 @@ const getUserExpense = makeGetUserExpense({
   Joi,
   getErrorMessage,
   capitalizeFirstLetters,
+  moment,
   ValidationError,
 });
+
+const makeGetUserExpenseByDate = require('./get-user-expense-by-date');
+const getUserExpenseByDate = makeGetUserExpenseByDate({
+  expensedb,
+  Joi,
+  getErrorMessage,
+  capitalizeFirstLetters,
+  moment,
+  ValidationError,
+});
+
+const makeGetUserExpenseById = require('./get-user-expense-by-id');
+const getUserExpenseById = makeGetUserExpenseById({
+  expensedb,
+  Joi,
+  getErrorMessage,
+  capitalizeFirstLetters,
+  ValidationError,
+});
+
 
 const makeUpdateUserExpense = require('./update-user-expense');
 const updateUserExpense = makeUpdateUserExpense({
@@ -92,7 +115,38 @@ const updateIsSpendLimitChangedFlag = makeUpdateIsSpendLimitChangedFlag({
   expensedb,
   getErrorMessage,
   ValidationError
-})
+});
+
+const makeExportExpense = require('./export-expense');
+const exportExpense = makeExportExpense({
+  Joi,
+  config,
+  getUserExpense,
+  getErrorMessage,
+  ValidationError,
+  ObjectNotFoundError,
+});
+
+const makeGetUserExpensesByMonth = require("./get-user-expenses-by-month");
+const getUserExpenseByMonth = makeGetUserExpensesByMonth({
+  getUserExpenseByDate,
+  Joi,
+  getErrorMessage,
+  moment,
+  ValidationError,
+  MONTHS,
+});
+
+const makeGetUserExpensesByMonthAndCategory = require("./get-user-expenses-by-month-and-category");
+const getUserExpenseByMonthAndCatgory = makeGetUserExpensesByMonthAndCategory({
+  expensedb,
+  Joi,
+  getErrorMessage,
+  moment,
+  ValidationError,
+  MONTHS,
+});
+
 
 module.exports = Object.freeze({
   addExpense,
@@ -100,5 +154,10 @@ module.exports = Object.freeze({
   getUserExpense,
   deleteUserExpense,
   updateUserExpense,
-  updateIsSpendLimitChangedFlag
+  updateIsSpendLimitChangedFlag,
+  exportExpense,
+  getUserExpenseById,
+  getUserExpenseByDate,
+  getUserExpenseByMonth,
+  getUserExpenseByMonthAndCatgory,
 });

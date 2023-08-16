@@ -11,17 +11,24 @@ const ERRORS = {
   'ER-00010': 'Date range overlapping',
   'ER-00011': 'Error while updating spend limit',
   'ER-00012': 'Spend Limit does not belong to any range, please add a new range',
-  'ER-00013': 'Error while updateing isSpentLimitChanged flag'
+  'ER-00013': 'Error while updateing isSpentLimitChanged flag',
+  'ER-00014': 'Error while exporting user expense',
+  'ER-00015': 'Month must be between 0 and 11',
+  'ER-00016': 'Can not select year in the future',
 }
 
 const CATEGORY_TABLE = ['id', 'category_name'];
 
 const EXPENSE_TABLE = ['activity', 'category_name', 'amount', 'spent_on'];
 
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 const DEAULT_SPEND_LIMIT = 0.00;
+
 module.exports = Object.freeze({
   ERRORS,
   CATEGORY_TABLE,
   DEAULT_SPEND_LIMIT,
   EXPENSE_TABLE,
+  MONTHS,
 })

@@ -1,11 +1,8 @@
-import constants from "../utils/constants";
+import {DISPLAY_TEXT} from '../utils/constants';
 
 const AppTitle = () => {
-  return (
-    <p className="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
-      {constants.APP_TITLE}
-    </p>
-  );
+  const {app_title} = DISPLAY_TEXT;
+  return <div className='header-items'><p className='title'>{app_title}</p></div>
 };
 
 export default AppTitle;

@@ -18,7 +18,7 @@ module.exports = function makeAddUserAction({
         last_name,
         profile_photo_url,
       });
-      return formatResponse({ contentType: 'application/json', statusCode: 200 , body: { item: response }});
+      return formatResponse({ contentType: 'application/json', statusCode: 201 , body: { item: response }});
     } catch (error) {
       console.error(error);
       return formatError({ error });

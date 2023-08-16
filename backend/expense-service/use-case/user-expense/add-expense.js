@@ -52,12 +52,10 @@ module.exports = function makeAddExpense({
     else {
       categoryId = expenseCategory['id'];
     }
-    console.log(spendLimitDetails);
     return await expensedb.addExpense({
       activity,
       categoryId,
       amount,
-      isAboveLimit: parseFloat(amount) > parseFloat(spendLimitDetails['spend_limit']),
       userId,
       spentOn,
       spendLimit: spendLimitDetails['id'],

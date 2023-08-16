@@ -11,3 +11,10 @@
 > setting spend limit for the day and or month and refresh accordingly
 > graphs for daily expense based on category and activity 
 > in all apis check for the userId validity in controller itself
+
+
+************************
+Need to cover edge cases
+1. After deleting expense check if the deleted category exists in db more then once. If it  does not exist more than one then delete it from category as well.
+2. After deleteing user all expesnse and categories related to it must be deleted
+3. Think of more ....

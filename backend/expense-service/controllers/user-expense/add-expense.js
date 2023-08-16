@@ -14,7 +14,7 @@ module.exports = function makeAddExpenseAction({
       // take from access token after auth service implementation
       const userId = 'a9827099-9494-4cd4-9411-3cf8c6c37126';
       const response = await addExpense({activity, amount, categoryName, userId, spentOn});
-      return formatResponse({ contentType: 'application/json', statusCode: 200 , body: { item: response }});
+      return formatResponse({ contentType: 'application/json', statusCode: 201 , body: { item: response }});
     } catch (error) {
       console.error(error);
       return formatError({ error });
