@@ -1,165 +1,166 @@
-import React, { useContext, useEffect, useState, useReducer } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from "axios";
-import config from '../../config';
+import { ENDPOINTS } from '../../utils/constants';
+import { popupContext } from '../Dashboard/Dashboard';
+import { BsCaretRightFill, BsCaretLeftFill, BsFillTrashFill } from "react-icons/bs";
+import { FiEdit2 } from "react-icons/fi";
+import { GiClick } from 'react-icons/gi';
+import { toast } from 'react-toastify';
+import Dropdown from '../../components/Dropdown';
+import DateTimePicker from 'react-datetime-picker';
 
-import noDataImage from '../../images/no_data_found.jpg'
-import constants from '../../utils/constants';
-
-import Table from '../../components/Table';
-import TableHeader from '../../components/TableHeader';
-import TableBody from '../../components/TableBody';
-import PaginationFooter from '../../components/PaginationFooter';
-import TableRow from '../../components/TableRow';
-import TableData from '../../components/TableData';
-import Icon from '../../components/Icon';
-import Button from '../../components/Button';
-import Popup from '../../components/Popup';
-import UpdateExpenseForm from '../Header/UpdateExpenseForm';
-
-import { popupTriggeredContext } from '../../App';
 
 export const userDetailsContext = React.createContext();
 
-const ExpenseList = () => {
-
-  console.log('Expense List Rendered');
+const ExpenseList = ({ filterStates, setFilterStates }) => {
 
   const headers = ['Category', 'Activity', 'Amount', 'Spent Date', 'Options'];
-  const [expensesData, setExpenseData] = useState([]);
-  const [isResponseSuccess, setResponseStatus] = useState(false);
-  const [updateExpenseData, setUpdateExpenseData] = useState();
-  const popupTriggeredCnxt = useContext(popupTriggeredContext);
+  const popupStates = useContext(popupContext);
+  const [expensesData, setExpenseData] = useState({ data: [], count: 0 });
+  const [dropDownItems, setDropDownItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const makeDropDownList = (items) => {
+    const arrOfNumbers = [];
+    let start = 0;
+    const makeDropDownList = (items) => {
+      start += 10;
+      if (start < items) {
+        arrOfNumbers.push(start);
+        makeDropDownList(items);
+      }
+      else {
+        arrOfNumbers.push(items);
+      }
+    }
+    makeDropDownList(items);
+    return arrOfNumbers;
+  }
+
+  const getExpenses = ({ apiParameters }) => {
+    axios({
+      method: 'GET',
+      url: ENDPOINTS['get-expenses'],
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      params: apiParameters,
+    }).then((response) => {
+      setExpenseData({
+        data: response.data.item,
+        count: response.data.item.length,
+      });
+    }).catch((error) => {
+      if (error && error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      }
+      toast.error('API error !');
+    });
+  }
+
+  const addHandler = (id) => {
+    popupStates.popupDispatch({ action: 'addExpense' });
+  }
 
   const editHandler = (id) => {
-    setUpdateExpenseData(expensesData.find((expense) => expense.id === id));
-    popupTriggeredCnxt.popupTriggeredDispatch('updateExpense')
+    popupStates.popupDispatch({ action: 'updateExpense', updateExpenseId: id });
   };
 
-  const deleteHandler = (id, index) => {
+  const deleteHandler = (id) => {
     axios({
       method: 'DELETE',
-      url: `${config.backendPoints['EXPENSE-SERVICE']}/v1/delete-user-expense/${id}`,
+      url: ENDPOINTS['delete-expenses'] + `/${id}`,
       headers: {
         'Content-Type': 'application/json'
       },
     }).then((response) => {
       console.log(response.data.item);
-      // expensesData.splice(index, 1)
-      // setExpenseData(expensesData);
-      setResponseStatus(true);
+      if (response.status === 200) {
+        toast.success('Expense deleted successfuly !');
+        getExpenses();
+      } else {
+        toast.error('Something went wrong!');
+      }
     }).catch((error) => {
       console.log(error.response.data.message);
       if (error && error.response && error.response.data && error.response.data.message) {
-        return error.response.data.message;
+        toast.error(error.response.data.message);
       }
-      return 'API error'
+      toast.error('Something went wrong ! (API Error)');
     });
   };
 
+  const pageChangeHandler = (isForward) => {
+    if (isForward) {
+      setCurrentPage(previousPage => previousPage + 1)
+    } else {
+      setCurrentPage(previousPage => previousPage - 1)
+    }
+  }
+
+  const handeLimitChange = (limit) => {
+    setFilterStates((prev) => {
+      return { ...prev, limit }
+    })
+  }
+
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: `${config.backendPoints['EXPENSE-SERVICE']}/v1/get-user-expense`,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    }).then((response) => {
-      console.log(response.data.item)
-      setExpenseData(response.data.item);
-      setResponseStatus(false);
-    }).catch((error) => {
-      if (error && error.response && error.response.data && error.response.data.message) {
-        return error.response.data.message;
-      }
-      return 'API error'
-    });
-  }, [popupTriggeredCnxt.popupTriggered, isResponseSuccess]);
+    getExpenses({ apiParameters: filterStates });
+  }, [filterStates]);
 
-  const editIcon = <Icon iconClass="fa fa-edit" fontSize="17px" fontColor="green" />;
-  const deleteIcon = <Icon iconClass="fa fa-trash-o" fontSize="17px" fontColor="red" />;
-
-  const rows = expensesData.map((expense, index) => {
-    const id = expense.id;
-    const category = expense.category_name;
-    const activity = expense.activity;
-    const amount = expense.amount;
-    const isAboveLimit = expense.is_above_limit
-    const spentOn = new Date(expense.spent_on);
-    const dayPostFix = constants.DAY_MAPPING[spentOn.getUTCDate()]
-      ? constants.DAY_MAPPING[spentOn.getUTCDate()]
-      : constants.DAY_MAPPING['ELSE'];
-    const date = [
-      spentOn.getUTCDate() + dayPostFix,
-      constants.MONTH_MAPPING[spentOn.getUTCMonth()],
-      spentOn.getUTCFullYear(),
-    ].join(' ');
-
-    return (
-      <TableRow key={id}>
-        <TableData>
-          <p className="font-semibold">{category}</p>
-        </TableData>
-        <TableData>
-          <p className="font-semibold">{activity}</p>
-        </TableData>
-        <TableData>
-          <span className={
-            `px-2 py-1
-            font-semibold
-            leading-tight
-            text-${isAboveLimit ? 'green' : 'red'}-700
-            bg-${isAboveLimit ? 'green' : 'red'}-100
-            rounded-full
-            dark:bg-${isAboveLimit ? 'green' : 'red'}-700
-            dark:text-${isAboveLimit ? 'green' : 'red'}-100`
-          }>
-            {amount}
-          </span>
-        </TableData>
-        <TableData><i>{date}</i></TableData>
-        <TableData>
-          <Button
-            icon={editIcon}
-            buttonColor="white"
-            buttonTextColor="black"
-            px="5"
-            onClick={(index) => editHandler(id, index)}
-          />
-          <Button
-            icon={deleteIcon}
-            buttonColor="white"
-            buttonTextColor="black"
-            px="5"
-            onClick={(index) => deleteHandler(id, index)}
-          />
-        </TableData>
-      </TableRow>
-    );
-  });
-
+  useEffect(() => {
+    setDropDownItems(makeDropDownList(expensesData.count));
+  }, [expensesData])
   return (
     <>
-      {
-        rows?.length ?
-          <>
-            <Popup triggered={popupTriggeredCnxt.popupTriggered['updateExpense']}>
-              <UpdateExpenseForm updateExpenseData={updateExpenseData} />
-            </Popup>
-            <Table>
-              <TableHeader headers={headers} />
-              <TableBody>{rows}</TableBody>
-            </Table>
-            <PaginationFooter />
-          </>
-          :
-          <div className="center-div">
-            <img
-              src={noDataImage}
-              alt="No Data Found !"
-              aria-hidden="true"
-            />
-          </div>
-      }
+      <div className='page-selector'>
+        <Dropdown dropDownItems={dropDownItems} handleDropDownItemClick={handeLimitChange} /><p>entries per page</p>
+      </div>
+      <div className='table-container'>
+        <table>
+          <thead>
+            <tr key='add-expense-button'>
+              <td className="expense-add-btn" colSpan={5} onClick={() => addHandler()}>
+                ADD EXPENSE <GiClick />
+              </td>
+            </tr>
+            <tr key='headers'>
+              {headers.map(header => <th key={header}>{header}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {expensesData?.data.map(row => {
+              return (
+                <tr key={row.id}>
+                  <td>{row.category_name}</td>
+                  <td>{row.activity}</td>
+                  <td>{row.amount}</td>
+                  <td>
+                    <span className={row.is_above_limit ? 'red' : 'green'}>
+                      {row.spent_on}
+                    </span>
+                  </td>
+                  <td>
+                    <div className='expense-action'>
+                      <button onClick={() => editHandler(row.id)}><FiEdit2 /></button>
+                      <button onClick={() => deleteHandler(row.id)}><BsFillTrashFill /></button>
+                    </div>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div >
+      <div className='page-number-selector'>
+        <button disabled={currentPage > 1 ? false : true} onClick={() => pageChangeHandler(false)}>
+          <BsCaretLeftFill />
+        </button>
+        <p>{currentPage}</p>
+        <button disabled={currentPage < (dropDownItems.length) ? false : true} onClick={() => pageChangeHandler(true)}>
+          <BsCaretRightFill />
+        </button>
+      </div>
     </>
   );
 };

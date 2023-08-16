@@ -1,6 +1,6 @@
 const TableRow = (props) => {
   return (
-    <tr className="text-gray-700 dark:text-gray-400">
+    <tr className="">
       {props.children}
     </tr>
   );

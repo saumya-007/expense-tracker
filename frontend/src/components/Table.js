@@ -1,5 +1,5 @@
 const Table = (props) => {
-  return <table className="w-full whitespace-no-wrap">{props.children}</table>;
+  return <table className="">{props.children}</table>;
 };
 
 export default Table;

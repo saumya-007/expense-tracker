@@ -1,28 +1,18 @@
-const constants = Object.freeze({
-    APP_TITLE: 'Expense Tracker',
-    EXPENSE_LIST_TITLE:'Expense History',
-    GRAPH_TITLE: 'Graph Views',
-    SEARCH_PLACE_HOLDER: 'Search for Activity',
-    MONTH_MAPPING: {
-        0:'Jan',
-        1:'Feb',
-        2:'Mar',
-        3:'April',
-        4:'May',
-        5:'June',
-        6:'July',
-        7:'August',
-        8:'Sept',
-        9:'Oct',
-        10:'Nov',
-        11:'Dec'
-    },
-    DAY_MAPPING: {
-        1: 'st',
-        2: 'nd',
-        3: 'rd',
-        'ELSE': 'th'
-    }
-})
+import config from "../config";
 
-export default constants;
+export const DISPLAY_TEXT = {
+    'app_title': 'Expense Tracker'
+};
+
+export const ENDPOINTS = {
+    'get-expenses': `${config.backendPoints['EXPENSE-SERVICE']}/v1/get-user-expense`,
+    'delete-expenses': `${config.backendPoints['EXPENSE-SERVICE']}/v1/delete-user-expense`, 
+    'update-expense': `${config.backendPoints['EXPENSE-SERVICE']}/v1/update-user-expense`,
+    'get-expense-by-id': `${config.backendPoints['EXPENSE-SERVICE']}/v1/get-user-expense`,
+    'get-expenses-by-date': `${config.backendPoints['EXPENSE-SERVICE']}/v1/get-user-expense-by-date`,
+    'get-expenses-by-month': `${config.backendPoints['EXPENSE-SERVICE']}/v1/get-user-expense-by-month`,
+    'get-user-expense-by-month-and-category': `${config.backendPoints['EXPENSE-SERVICE']}/v1/get-user-expense-by-month-and-category`,
+}
+
+export const MONTHS_ARRAY = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+export const WEEK_ARRAY = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]

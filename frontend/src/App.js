@@ -1,37 +1,32 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import './App.css';
 
 import Header from './pages/Header/Header';
 import BodyRouting from './Routing/BodyRouting';
+import Temp from './Temp';
 
-export const popupTriggeredContext = React.createContext();
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const initialState = {
-    'addExpense': false,
-    'uploadExpense': false,
-    'updateExpense': false,
-  };
-  const render = (popupTriggered, action) => {
-    switch (action) {
-      case 'addExpense':
-        return { ...popupTriggered, 'addExpense': !popupTriggered['addExpense'] };
-      case 'uploadExpense':
-        return { ...popupTriggered, 'uploadExpense': !popupTriggered['uploadExpense'] };
-      case 'updateExpense':
-        return { ...popupTriggered, 'updateExpense': !popupTriggered['updateExpense'] };
-      default:
-        return popupTriggered;
-    }
-  }
-  const [popupTriggered, dispatch] = useReducer(render, initialState)
   return (
-    <div className="App">
-      <popupTriggeredContext.Provider value={{ popupTriggered: popupTriggered, popupTriggeredDispatch: dispatch }}>
-        <Header />
-        <BodyRouting />
-      </popupTriggeredContext.Provider>
-    </div>
+    <>
+      {/* <Temp /> */}
+      <ToastContainer
+        position='top-center'
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='light'
+      />
+      <Header />
+      <BodyRouting />
+    </>
   );
 }
 

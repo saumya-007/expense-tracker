@@ -19,8 +19,8 @@ const SpentLimitForm = () => {
 
     return (
         <>
-            <ul className="flex items-center flex-shrink-0 space-x-6">
-                <li className="relative">
+            <ul className="">
+                <li className="">
                     <Input
                         defaultValue={spentLimit}
                         placeholder={spentLimit}
@@ -28,7 +28,7 @@ const SpentLimitForm = () => {
                         inputType="text"
                     />
                 </li>
-                <li className="relative">
+                <li className="">
                     <Input
                         defaultValue={PROPS['startDate']}
                         value={new Date()}
@@ -37,7 +37,7 @@ const SpentLimitForm = () => {
                         inputType="date"
                     />
                 </li>
-                <li className="relative">
+                <li className="">
                     <Input
                         defaultValue={PROPS['endDate']}
                         placeholder="Enter Date"
@@ -45,7 +45,7 @@ const SpentLimitForm = () => {
                         inputType="date"
                     />
                 </li>
-                <li className="relative">
+                <li className="">
                     <Button
                         px="2"
                         py="2"

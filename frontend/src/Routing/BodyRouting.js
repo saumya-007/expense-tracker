@@ -1,13 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
-import Body from '../pages/Dashboard/Body'
+import Body from './Body'
 
-const BodyRouting = (porps) => {
+const BodyRouting = () => {
     return (
         <Routes>
-            <Route exact path="dashboard/*" element={
-                <Body />
-            }>
-            </Route>
+            <Route exact path="dashboard/*" element={<Body />} />
         </Routes>
     )
 }
