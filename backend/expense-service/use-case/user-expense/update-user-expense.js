@@ -47,7 +47,6 @@ module.exports = function makeUpdateExpense({
         activity = activity ? activity : userExpenses.activity;
         amount = amount ? amount : userExpenses.amount;
         spentOn = spentOn ? spentOn : userExpenses.spent_on;
-        isAboveLimit = parseFloat(amount) > parseFloat(spendLimitDetails['spend_limit']);
         isSpentLimitChanged = userExpenses['is_spent_limit_changed'] ? false :  true;
 
         let categoryId = null;
@@ -75,7 +74,6 @@ module.exports = function makeUpdateExpense({
             activity: capitalizeFirstLetters({str: activity, withSpace: true, skipFirst: false }),
             categoryId,
             amount,
-            isAboveLimit,
             spentOn,
             userId,
             isSpentLimitChanged,

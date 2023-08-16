@@ -6,6 +6,9 @@ const {
   deleteUserExpense,
   exportExpense,
   getUserExpenseById,
+  getUserExpenseByDate,
+  getUserExpenseByMonth,
+  getUserExpenseByMonthAndCatgory,
 } = require('../../use-case');
 const { formatResponse, formatError } = require('../formateResponse');
 const { DEAULT_SPEND_LIMIT } = require('../../utils/constants');
@@ -28,6 +31,13 @@ const importExpensesAction = makeImportExpensesAction({
 const makeGetUserExpenseAction = require('./get-user-expense');
 const getUserExpenseAction = makeGetUserExpenseAction({
   getUserExpense,
+  formatResponse,
+  formatError,
+});
+
+const makeGetUserExpenseByDateAction = require('./get-user-expense-by-date');
+const getUserExpenseByDateAction = makeGetUserExpenseByDateAction({
+  getUserExpenseByDate,
   formatResponse,
   formatError,
 });
@@ -60,6 +70,20 @@ const exportExpenseAction = makeExportExpenseAction({
   formatError,
 })
 
+const makeGetUserExpenseByMonthAction = require('./get-user-expenses-by-month');
+const getUserExpenseByMonthAction = makeGetUserExpenseByMonthAction({
+  getUserExpenseByMonth,
+  formatResponse,
+  formatError,
+});
+
+const makeGetUserExpenseByMonthAndCategoryAction = require('./get-user-expenses-by-month-and-category');
+const getUserExpenseByMonthAndCategoryAction = makeGetUserExpenseByMonthAndCategoryAction({
+  getUserExpenseByMonthAndCatgory,
+  formatResponse,
+  formatError,
+});
+
 module.exports = Object.freeze({
   addExpenseAction,
   importExpensesAction,
@@ -68,4 +92,7 @@ module.exports = Object.freeze({
   deleteUserExpenseAction,
   exportExpenseAction,
   getUserExpenseByIdAction,
+  getUserExpenseByDateAction,
+  getUserExpenseByMonthAction,
+  getUserExpenseByMonthAndCategoryAction,
 });

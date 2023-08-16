@@ -1,14 +1,17 @@
-module.exports = function makeGetUserExpenseByIdAction({
-  getUserExpenseById,
+module.exports = function makeGetUserExpenseByDateAction({
+  getUserExpenseByDate,
   formatResponse,
   formatError,
 }) {
-  return async function getUserExpenseByIdAction(httpRequest) {
+  return async function getUserExpenseByDateAction(httpRequest) {
       try {
           // take from access token after auth service implementation
           const userId = 'a9827099-9494-4cd4-9411-3cf8c6c37126';
-          const expenseId = httpRequest.params.expenseId;
-          const response = await getUserExpenseById({ userId, expenseId });
+          const response = await getUserExpenseByDate({ 
+              userId,
+              startDate: httpRequest.query.startDate,
+              endDate: httpRequest.query.endDate,
+           });
           return formatResponse({ contentType: 'application/json', statusCode: 200, body: { item: response } });
       } catch (error) {
           console.error(error);

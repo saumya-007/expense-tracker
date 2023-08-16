@@ -1,16 +1,16 @@
-module.exports = function makeGetUserExpense({
-    getUserExpense,
+module.exports = function makeGetUserExpensesByMonthAndCategoryAction({
+    getUserExpenseByMonthAndCatgory,
     formatResponse,
     formatError,
 }) {
-    return async function getUserExpenseAction(httpRequest) {
+    return async function getUserExpenseAndCategoryAction(httpRequest) {
         try {
             // take from access token after auth service implementation
             const userId = 'a9827099-9494-4cd4-9411-3cf8c6c37126';
-            const response = await getUserExpense({ 
+            const response = await getUserExpenseByMonthAndCatgory({ 
                 userId,
-                startDate: httpRequest.query.startDate,
-                endDate: httpRequest.query.endDate,
+                month: httpRequest.query.month,
+                year: httpRequest.query.year,
              });
             return formatResponse({ contentType: 'application/json', statusCode: 200, body: { item: response } });
         } catch (error) {

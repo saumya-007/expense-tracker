@@ -20,7 +20,10 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     addSpendLimit,
     updateSpendLimit,
     updateIsSpendLimitChangedFlag,
-    getAllSpendLimitExpectOne
+    getAllSpendLimitExpectOne,
+    getTotalAmountAgainstSpendLimit,
+    getUserExpenseByCategory,
+    getAllCategories,
   });
 
 
@@ -28,7 +31,6 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     activity,
     categoryId,
     amount,
-    isAboveLimit,
     userId,
     spentOn,
     spendLimit
@@ -39,7 +41,6 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         'category_id',
         'amount',
         'user_id',
-        'is_above_limit',
         'created_at',
         'created_by',
         'modified_at',
@@ -52,7 +53,6 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         categoryId,
         amount,
         userId,
-        isAboveLimit,
         new Date(),
         userId,
         new Date(),
@@ -197,19 +197,22 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
   async function getUserExpense({
     userId,
     expenseId,
+    startDate,
+    endDate,
+    fieldsToQuery,
   }) {
     try {
       const values = [
         userId
       ];
-      const fields = [
+      const fields = fieldsToQuery ? fieldsToQuery : [
         'id',
         'activity',
         'category_name',
         'amount',
-        'is_above_limit',
         'spent_on',
-        'is_spent_limit_changed'
+        'is_spent_limit_changed',
+        'spend_limit'
       ]
 
       if (expenseId) {
@@ -219,15 +222,28 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
 
       const query = `
                     SELECT 
-                      ${fields.map(field => field === 'category_name' ? `cat.${field}` : `ex.${field}`)}
+                      ${fields.map(field => {
+                        if (field === 'category_name') return `cat.${field}`
+                        else if (field === 'spend_limit') return `sl.${field}, ex.spend_limit as spend_limit_id`
+                        else  return `ex.${field}`
+                      })}
                     FROM
                       ${EXPENSE_TABLE_NAME} ex
                     LEFT JOIN
                       ${CATEGORY_TABLE_NAME} cat
                     ON 
                       ex.category_id = cat.id
+                    LEFT JOIN 
+                      ${SPEND_LIMIT} sl
+                    ON 
+                      ex.spend_limit = sl.id
                     WHERE
                       ex.user_id = $1
+                    ${startDate && endDate ? 
+                      `AND spent_on BETWEEN '${startDate}' AND '${endDate}'`
+                      :
+                      ''
+                    }
                     ${expenseId ?
                     `AND
                       ex.id = $2
@@ -246,6 +262,137 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
       return expenseId ? result.rows[0] : result.rows;
     } catch (e) {
       console.error('makeExpenseDb : getUserExpense');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
+  async function getUserExpenseByCategory({
+    userId,
+    startDate,
+    endDate,
+  }) {
+    try {
+      const values = [
+        userId,
+        startDate,
+        endDate,
+      ];
+
+      const query = `
+                  SELECT 
+                    sum(ex.amount), cat.category_name
+                  FROM
+                    ${EXPENSE_TABLE_NAME} ex
+                  LEFT JOIN 
+                    ${SPEND_LIMIT} sl
+                  ON 
+                    ex.spend_limit = sl.id
+                  LEFT JOIN
+                    ${CATEGORY_TABLE_NAME} cat
+                  ON
+                    ex.category_id = cat.id
+                  WHERE
+                    ex.user_id = $1
+                  AND
+                    ex.spent_on BETWEEN $2 AND $3
+                  GROUP BY cat.category_name
+                    `;
+      console.log(values);
+      console.log(query);
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return [];
+      }
+      return result.rows;
+    } catch (e) {
+      console.error('makeExpenseDb : getUserExpense');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
+  async function getAllCategories({
+    userId,
+    startDate, 
+    endDate,
+  }) {
+    try {
+      const values = [
+        userId,
+      ];
+      startDate && endDate ? values.push(startDate, endDate) : null;
+
+      const query = `
+                  SELECT DISTINCT
+                    cat.category_name
+                  FROM
+                    ${EXPENSE_TABLE_NAME} ex
+                  LEFT JOIN 
+                    ${SPEND_LIMIT} sl
+                  ON 
+                    ex.spend_limit = sl.id
+                  LEFT JOIN
+                    ${CATEGORY_TABLE_NAME} cat
+                  ON
+                    ex.category_id = cat.id
+                  WHERE
+                    ex.user_id = $1
+                  ${startDate && endDate ? 'AND ex.spent_on BETWEEN $2 AND $3' : ''}
+                    `;
+      console.log(query, values)
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return [];
+      }
+      return result.rows.map(item => item.category_name);
+    } catch (e) {
+      console.error('makeExpenseDb : getAllCategories');
+      console.error(e);
+      throw new UnknownError();
+    }
+  }
+
+  async function getTotalAmountAgainstSpendLimit({
+    userId,
+  }) {
+    try {
+      const values = [
+        userId,
+      ];
+
+      const query = `
+                    SELECT 
+                      sum(ex.amount), sl.spend_limit as spent_limit_amount, sl.id
+                    FROM
+                      ${EXPENSE_TABLE_NAME} ex
+                    LEFT JOIN 
+                      ${SPEND_LIMIT} sl
+                    ON 
+                      ex.spend_limit = sl.id
+                    WHERE
+                      ex.user_id = $1
+                    GROUP BY sl.id
+                    `;
+      const result = await cockroach.executeQuery({
+        database,
+        query,
+        values,
+      });
+      if (!result || !result.rows || !result.rows.length) {
+        return [];
+      }
+      return result.rows;
+    } catch (e) {
+      console.error('makeExpenseDb : getTotalAmountAgainstSpendLimit');
       console.error(e);
       throw new UnknownError();
     }
@@ -288,7 +435,6 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
     activity,
     categoryId,
     amount,
-    isAboveLimit,
     spentOn,
     userId,
     isSpentLimitChanged
@@ -299,7 +445,6 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         activity,
         categoryId,
         amount,
-        isAboveLimit,
         spentOn,
         userId,
         new Date(),
@@ -309,7 +454,6 @@ function makeExpenseDb({ database, cockroach, UnknownError }) {
         'activity',
         'category_id',
         'amount',
-        'is_above_limit',
         'spent_on',
         'modified_by',
         'modified_at',
