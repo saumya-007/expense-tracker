@@ -1,6 +1,6 @@
 const config = {
     cockroachCloudCluster: {
-      connectionString: 'postgresql://saumya:u9TW21iLXLBGV5RvMuAC5A@expense-tracker-2882.7s5.cockroachlabs.cloud:26257/userdb?sslmode=verify-full',
+      connectionString: 'CONNECTOIN_STRING',
       dbName: 'userdb'
     },
     defaultAlgorithm: 'aes-256-cbc'
