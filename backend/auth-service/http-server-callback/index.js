@@ -19,7 +19,8 @@ module.exports = function makeHttpCallBack(controller) {
         if (httpResponse.headers) {
           res.set(httpResponse.headers);
         }
-        res.type('json');
+        console.log({httpResponse});
+        httpResponse.isHtml ? null : res.type('json');
         console.info(httpResponse);
         res.status(httpResponse.statusCode).send(httpResponse.body);
       })

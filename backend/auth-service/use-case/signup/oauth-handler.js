@@ -7,6 +7,7 @@ module.exports = function makeOauthHandler({
     googleOauthTokenConfig,
     getErrorMessage,
     ValidationError,
+    DEFAULT_AUTH_TEMPLATE,
 }) {
     return async function oauthHandler({ code }) {
         try {
@@ -51,18 +52,22 @@ module.exports = function makeOauthHandler({
                 throw new ValidationError('ER-00005', getErrorMessage('ER-00005'));
             }
 
-            await addUser ({
+            const userDetails = await addUser({
                 email,
                 name,
                 first_name: given_name,
                 last_name: family_name,
                 profile_photo_url: picture,
-              });
-
-            return true;
+            });
+            console.log(userDetails);
+            return makeTemplate({ htmlContent: DEFAULT_AUTH_TEMPLATE.htmlContent, replaceField: DEFAULT_AUTH_TEMPLATE.replaceField, replaceBy: userDetails.id });
         } catch (error) {
             const message = [(getErrorMessage('ER-00001') || ''), error.message].join(', ');
             throw new ValidationError('ER-00001', message);
         }
-    }
+    };
+
+    function makeTemplate({htmlContent, replaceField, replaceBy}) {
+        return htmlContent.replaceAll(replaceField, replaceBy);
+    };
 }

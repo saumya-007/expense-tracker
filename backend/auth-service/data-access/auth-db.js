@@ -36,11 +36,15 @@ module.exports = function makeAuthDb({ database, cockroach, UnknownError }) {
                         `;
             console.log(query);
             console.log(values);
-            const result = await cockroach.executeQuery({
-                database,
-                query,
-                values,
-            });
+            // const result = await cockroach.executeQuery({
+            //     database,
+            //     query,
+            //     values,
+            // });
+
+            const result = {
+                rows: []
+            }
 
             if (!result || !result.rows || !result.rows.length) {
                 return false;

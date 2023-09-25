@@ -6,6 +6,7 @@
 }
 
 :root {
+  /* For View And Debugging */
   --view-header: #b00;
   --view-header-items: white;
   --view-profile-photo: black;
@@ -24,42 +25,53 @@
   --view-input-color: white;
   --view-button-bg: #4caf50;
   --view-button-color: white;
-  /* For View And Debugging */
-  --view-header: #272935;
-  --view-title-color: white;
-  --view-profile-color: white;
-  --view-profile-photo: white;
-  --view-menu: #8bc3c4;
-  --view-nav-links-a: black;
-  --view-nav-links-li-border: #272935;
-  --view-input-shadow: rgba(0, 0, 0, 0.06);
-  --view-graph-container-shadow: rgba(0, 0, 0, 0.06);
-  --view-button-search-btn: #272935;
-  --view-th: white;
-  --view-th-bg: #272935;
-  --view-action-button-bg: #272935;
-  --view-action-button: #8bc3c4;
-  --view-form-input: rgb(161, 161, 161);
-  --view-form-submit-button: #272935;
-  --view-form-submit-button-bg: #8bc3c4;
-  --view-form-add-button: #272935;
-  --view-form-add-button-bg: #8bc3c4;
-  --view-table-bg: rgb(207, 207, 207);
-  --view-graph-container-bg: rgb(207, 207, 207);
-  --view-popup-close: #272935;
-  --view-spent-limit-red: rgb(165, 26, 26);
-  --view-spent-limit-green: rgb(36, 160, 36);
-  --view-spent-limit-color: white;
-  --view-dropdown: #272935;
-  --view-dropdown-hover: #8bc3c4;
-  --view-dropdown-hover-color: #272935;
-  --view-active-mobile-view-font-color: rgb(238,162,154);
-  --view-input-date: #8bc3c4;
-  --view-input-date-color: #272935;
-  --view-graph-title-backround-color:#1e2547;
-  --view-graph-title-color: white;
-  --view-fillern-bg: #8bc3c4;
-  --view-filler-color: #1e2547;
+  --danger: rgb(165, 26, 26);
+  --success: rgb(36, 160, 36);
+  /* Static Colors*/
+  --primary: #2e386d;
+  --primary-dark: #272935;
+  --primary-light: #8bc3c4;
+  --secondary-dark: #1e2547;
+  --secondary-light: rgb(238, 162, 154);
+  --shadow-gray: rgba(0, 0, 0, 0.06);
+  --light-gray: rgb(161, 161, 161);
+  --darker-gray: rgb(207, 207, 207);
+  --base-light: white;
+  --view-header: var(--primary-dark);
+  --view-title-color: var(--base-light);
+  --view-profile-color: var(--base-light);
+  --view-profile-photo: var(--base-light);
+  --view-menu: var(--primary-dark);
+  --view-nav-links-a: var(--base-light);
+  --view-nav-links-li-border: var(--primary-dark);
+  --view-input-shadow: var(--shadow-gray);
+  --view-graph-container-shadow: var(--shadow-gray);
+  --view-button-search-btn: var(--primary-light);
+  --view-th: var(--base-light);
+  --view-th-bg: var(--primary-dark);
+  --view-action-button-bg: var(--primary-dark);
+  --view-action-button: var(--primary-light);
+  --view-form-input: var(--light-gray);
+  --view-form-submit-button: var(--primary-dark);
+  --view-form-submit-button-bg: var(--primary-light);
+  --view-form-add-button: var(--primary-dark);
+  --view-form-add-button-bg: var(--primary-light);
+  --view-table-bg: var(--darker-gray);
+  --view-graph-container-bg: var(--darker-gray);
+  --view-popup-close: var(--primary-dark);
+  --view-spent-limit-red: var(--danger);
+  --view-spent-limit-green: var(--success);
+  --view-spent-limit-color: var(--base-light);
+  --view-dropdown: var(--primary-dark);
+  --view-dropdown-hover: var(--primary-light);
+  --view-dropdown-hover-color: var(--primary-dark);
+  --view-active-mobile-view-font-color: var(--secondary-light);
+  --view-input-date: var(--primary-light);
+  --view-input-date-color: var(--primary-dark);
+  --view-graph-title-backround-color: var(--secondary-dark);
+  --view-graph-title-color: var(--base-light);
+  --view-fillern-bg: var(--primary-light);
+  --view-filler-color: var(--secondary-dark);
   --fullwidth: 100%;
 }
 body {
@@ -89,15 +101,28 @@ input[type="button"] {
   font-size: 16px;
 }
 
-input[type="date"] {
-  background-color: var(--view-input-date);
-  border: none;
-  color: var(--view-input-date-color);
-  padding: 10px 12px;
+.date-time-picker input[type="date"] {
+  background-color: var(--base-light);
+  border: 2px solid var(--primary-dark);
+  border-radius: 5px;
+  color: var(--primary-dark);
+  padding: 8px 8px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+}
+
+.left-date {
+  border-right: none !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.right-date {
+  border-left: none !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
 }
 
 .fr {
@@ -188,7 +213,7 @@ nav {
   font-size: 20px;
 }
 .nav-links .active {
-  border-bottom: 5px solid var(--view-nav-links-a) !important;
+  border-bottom: 5px solid var(--primary-light) !important;
 }
 
 /* Date box CSS */
@@ -226,7 +251,7 @@ nav {
 }
 table {
   border-collapse: collapse;
-  border: 1px solid var(--view-table-bg);
+  border: 0px solid var(--view-table-bg);
   box-shadow: 0 0 15px 4px var(--view-input-shadow);
   width: 100%;
 }
@@ -237,6 +262,9 @@ td {
 }
 tr:nth-child(even) {
   background-color: #eeeeee;
+}
+tr:nth-child(odd) {
+  background-color: var(--base-light);
 }
 th {
   background-color: var(--view-th-bg);
@@ -287,27 +315,12 @@ button {
   font-size: 16px;
 }
 
-.search-box button {
-  min-height: 4vh;
-  background-color: var(--view-button-search-btn);
-  color: var(--view-button-color);
-  border-radius: 0px;
-  padding: 5px 5px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border: 0;
-  box-shadow: 0 0 15px 4px var(--view-input-shadow);
-  border-bottom: 1px solid black;
-}
-
 .search-box input {
   padding-left: 10px;
   min-height: 4vh;
-  border: 0;
-  box-shadow: 0 0 15px 4px var(--view-input-shadow);
-  border-bottom: 1px solid #eee;
+  font-size: large;
+  border: 2px solid var(--primary-dark);
+  border-radius: 5px;
 }
 
 .popup {
@@ -402,23 +415,30 @@ button {
 }
 
 .filler {
-  background-color: var(--view-fillern-bg);
+  background-color: var(--base-light);
   color: var(--view-fillern-color);
-  padding: 11px 12px;
+  border: 2px solid var(--primary-dark);
+  border-left: none;
+  border-right: none;
+  padding: 9px 9px;
   font-size: 16px;
 }
 
 .dropbtn {
   cursor: pointer;
-  background-color: var(--view-dropdown);
-  border: none;
+  background-color: transparent;
+  border-bottom: 4px solid var(--secondary-dark);
   border-radius: 0px;
-  color: var(--view-input-color);
+  color: var(--secondary-dark);
   padding: 10px 12px;
+  display: flex;
   text-align: center;
+  justify-content: space-between;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
+  width: 200px;
+  flex:1;
+  margin-bottom: 5px;
 }
 
 .dropdown {
@@ -430,7 +450,7 @@ button {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
+  min-width: 250px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
@@ -508,16 +528,155 @@ button {
   color: var(--view-graph-title-color);
 }
 
+/* Login */
+
+.timeline {
+  display: flex;
+  height: 10vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.timeline-items {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timeline-step {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 20px;
+  color: var(--base-light);
+}
+
+.timeline-step .done{
+  background-color: var(--success);
+}
+
+.timeline-break {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 100px;
+}
+
+.registration {
+  display: flex;
+  height: 70vh;
+}
+
+.registration-sign-up {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  align-items: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.registration-sign-up span{
+  font-size: 35px;
+  font-weight: bolder;
+}
+
+.login-link {
+  margin-top: 10px;
+  color: var(--primary);
+}
+
+.login-link .clickable{
+  font-size: 16px;
+  font-weight: bolder;
+}
+
+.register-button {
+  display: flex;
+  gap: 10px;
+}
+
+.registration-set-password {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+.registration-set-password span {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 35px;
+  font-weight: bolder;
+}
+
+.set-password {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0px 40px 0px;
+}
+
+.set-profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid var(--view-profile-photo);
+}
+.set-password-item-profile-pic {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--primary);
+}
+
+.set-password-item {
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  padding: 10px 10px 20px 10px;
+}
+
+.set-password-item label {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  letter-spacing: 1px;
+  color: var(--primary);
+}
+.set-password-item input {
+  padding: 10px;
+  width: 400px;
+  border: 2px solid var(--primary);
+  border-radius: 2px;
+}
+
+.set-password-item input[type='email'] {
+  padding: 10px;
+  width: 400px;
+  border: 1px solid var(--primary);
+  background-color: var(--shadow-gray);
+  border-radius: 2px;
+}
+
+.oauth-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 22px;
+}
+
 /* Media Queries */
 
-@media only screen and (max-width: 1800px) {
-  .page-selector {
-    width: 20%;
-  }
-  .page-number-selector {
-    width: 10%;
-  }
-}
 
 @media only screen and (max-width: 1200px) {
   .page-selector {
@@ -535,9 +694,6 @@ button {
 }
 
 @media only screen and (max-width: 960px) {
-  .page-selector {
-    width: 30%;
-  }
   .page-number-selector {
     width: 18%;
   }
@@ -556,18 +712,12 @@ button {
   .header {
     grid-template-columns: 40% 40%;
   }
-  .page-selector {
-    width: 35%;
-  }
   .page-number-selector {
     width: 18%;
   }
 }
 
 @media only screen and (max-width: 800px) {
-  .page-selector {
-    width: 35%;
-  }
   .page-number-selector {
     width: 20%;
   }
@@ -599,9 +749,6 @@ button {
     font-size: 15px;
     padding: 15px 17px;
   }
-  .page-selector {
-    width: 40%;
-  }
   .page-number-selector {
     width: 20%;
   }
@@ -628,9 +775,6 @@ button {
   }
   .date-box .fr {
     float: none;
-  }
-  .page-selector {
-    width: 50%;
   }
   .page-number-selector {
     width: 25%;
@@ -669,9 +813,6 @@ button {
     background-color: transparent;
     border: none;
     color: blue;
-  }
-  .page-selector {
-    width: 100%;
   }
   .page-number-selector {
     padding-left: 0px;

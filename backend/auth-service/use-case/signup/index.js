@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const { ValidationError } = require('../../exceptions');
-const { ERRORS } = require('../../utils/constants');
+const { ERRORS, DEFAULT_AUTH_TEMPLATE } = require('../../utils/constants');
 
 const ErrorUtils = require('../../utils/ErrorUtils');
 const getErrorMessage = new ErrorUtils({ errors: ERRORS }).getErrorMessageFromCode.bind(new ErrorUtils({ errors: ERRORS }));
@@ -32,6 +32,7 @@ const oauthHandler = makeOauthHandler({
   googleOauthTokenConfig,
   getErrorMessage,
   ValidationError,
+  DEFAULT_AUTH_TEMPLATE,
 });
 
 module.exports = Object.freeze({

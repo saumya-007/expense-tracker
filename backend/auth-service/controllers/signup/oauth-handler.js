@@ -1,13 +1,13 @@
 module.exports = function makeOauthHandlerAction({
     oauthHandler,
-    formatResponse,
+    formatHtmlResponse,
     formatError,
 }) {
     return async function oauthHandlerAction(httpRequest) {
         try {
             const code = httpRequest.query.code;
             const response = await oauthHandler({code});
-            return formatResponse({ contentType: 'application/json', statusCode: 200, body: { item: response } });
+            return formatHtmlResponse({htmlContent: response, statusCode: 200});
         } catch (error) {
             console.error(error);
             return formatError({ error });

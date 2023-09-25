@@ -20,4 +20,13 @@ function formatError({ error }) {
   });
 }
 
-module.exports = { formatResponse, formatError };
+function formatHtmlResponse({htmlContent, statusCode}) {
+  const formattedResponse = {
+    statusCode,
+    isHtml: true,
+    body: htmlContent,
+  };
+  return formattedResponse;
+}
+
+module.exports = { formatResponse, formatError, formatHtmlResponse };

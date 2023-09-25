@@ -1,5 +1,3 @@
-import { BsSearch } from "react-icons/bs";
-
 const SearchBar = ({updateSearchTerm}) => {
   const changeHandler = (e) => {
     const currentInputValue = e.target.value;
@@ -8,7 +6,6 @@ const SearchBar = ({updateSearchTerm}) => {
   return (
     <>
       <input type='text' placeholder="Search Expense" onChange={changeHandler}/>
-      <button><BsSearch onClick={changeHandler}/></button>
     </>
   );
 };

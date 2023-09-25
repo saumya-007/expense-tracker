@@ -9,6 +9,7 @@ import NavigationBar from './NavigationBar';
 import Home from '../pages/Home/Home'
 import Graphs from '../pages/Graphs/Graphs';
 import Dashboard from '../pages/Dashboard/Dashboard';
+import Header from '../pages/Header/Header';
 
 const Body = () => {
   
@@ -20,6 +21,7 @@ const Body = () => {
 
   return (
     <>
+      <Header />
       <NavigationBar />
       <Outlet />
       <Routes>

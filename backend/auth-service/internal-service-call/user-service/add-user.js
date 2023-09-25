@@ -25,7 +25,7 @@ module.exports = function makeAddUser({
                 profile_photo_url,
             }
         }).then((response) => {
-            return response.data
+            return response.data.item
         }).catch((error) => {
             if (error && error.response && error.response.data && error.response.data.message) {
                 const message = [(getErrorMessage('ER-00004') || ''), error.response.data.message].join(', ');

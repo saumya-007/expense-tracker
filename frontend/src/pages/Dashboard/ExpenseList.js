@@ -8,7 +8,7 @@ import { GiClick } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 import Dropdown from '../../components/Dropdown';
 import DateTimePicker from 'react-datetime-picker';
-
+import moment from 'moment'
 
 export const userDetailsContext = React.createContext();
 
@@ -113,9 +113,7 @@ const ExpenseList = ({ filterStates, setFilterStates }) => {
   }, [expensesData])
   return (
     <>
-      <div className='page-selector'>
-        <Dropdown dropDownItems={dropDownItems} handleDropDownItemClick={handeLimitChange} /><p>entries per page</p>
-      </div>
+        <Dropdown dropDownItems={dropDownItems} handleDropDownItemClick={handeLimitChange} />
       <div className='table-container'>
         <table>
           <thead>
@@ -137,7 +135,7 @@ const ExpenseList = ({ filterStates, setFilterStates }) => {
                   <td>{row.amount}</td>
                   <td>
                     <span className={row.is_above_limit ? 'red' : 'green'}>
-                      {row.spent_on}
+                      {moment(row.spent_on).format('DD-MM-YYYY')}
                     </span>
                   </td>
                   <td>

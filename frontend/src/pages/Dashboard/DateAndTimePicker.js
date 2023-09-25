@@ -45,11 +45,11 @@ function DateAndTimePicker({updateDates}) {
   }, [startDate, endDate])
 
   return (
-    <>
-      <input type='date' defaultValue={startDate} onChange={handleStartDateChange}></input>
+    <div className='date-time-picker'>
+      <input type='date' defaultValue={startDate} onChange={handleStartDateChange} className='left-date'></input>
       <span className="filler">-</span>
-      <input type='date' defaultValue={endDate} onChange={handleEndDateChange}></input>
-    </>
+      <input type='date' defaultValue={endDate} onChange={handleEndDateChange} className='right-date'></input>
+    </div>
   )
 }
 
